@@ -8,13 +8,11 @@
 //
 
 namespace FNFoundation;
-
-interface FNConstantString {
-    public static function initWithCString();
-}
-interface FNConstantNumber {
-    public static function initWithNumber();
-}
+use FNContainer;
+use FNCountable;
+use FNNumber;
+use FNMutable;
+use FNArray;
 
 class FNString extends FNContainer implements FNCountable {
     const CASE_LOWER = MB_CASE_LOWER;

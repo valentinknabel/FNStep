@@ -8,16 +8,26 @@
 //
 	
 namespace FNFoundation;
-class FNArray extends FNContainer implements \Iterator, \ArrayAccess, FNCountable {
+use FNContainer;
+use \Iterator;
+use \ArrayAccess;
+use FNCountable;
+use object;
+use FNNumber;
+use FNDictionary;
+use FNMutable;
+use FNSet;
+
+class FNArray extends FNContainer implements Iterator, ArrayAccess, FNCountable {
 	private $position;
 	
 	/**
 	 * 
-	 * @param FNInitializable $object1
-	 * @param FNInitializable $object2
+	 * @param object $object1
+	 * @param object $object2
 	 * @return FNArray
 	 */
-	static function initWithList(FNInitializable $object1, FNInitializable $object2 = NULL /* infinite arguments */) {
+	static function initWithList(object $object1, object $object2 = NULL /* infinite arguments */) {
 		return static::initWith(func_get_args());
 	}
 	
@@ -132,7 +142,7 @@ class FNArray extends FNContainer implements \Iterator, \ArrayAccess, FNCountabl
     function offsetSet($offset, $value) {
     	if(!($offset instanceof FNNumber))
     		$offset = FNNumber::initWith($offset);
-    	if($offset instanceof FNNumber && $value instanceof FNInitializable) {
+    	if($offset instanceof FNNumber && $value instanceof object) {
     		$temp = $this->value[$offset->value()];
     		$temp[$offset->value()] = $value;
     		return $this->returnObjectWith($temp);
@@ -165,10 +175,10 @@ class FNArray extends FNContainer implements \Iterator, \ArrayAccess, FNCountabl
      * 
      * Enter description here ...
      * @param FNNumber $index
-     * @param FNInitializable $value
+     * @param object $value
      * @return FNSArray
      */
-    function setvalueForIndex(FNNumber $index,FNInitializable $value) {
+    function setvalueForIndex(FNNumber $index,object $value) {
     	$array = $this->value();
     	$array[$index->value()] = $value;
     	return $this->returnObjectWith($array);
@@ -197,14 +207,14 @@ class FNArray extends FNContainer implements \Iterator, \ArrayAccess, FNCountabl
     /**
      * adds objects to the end of the array
      * infinite arguments
-     * @param FNInitializable $object
-     * @param FNInitializable $object2
+     * @param object $object
+     * @param object $object2
      * @return FNArray
      */
-    function add(FNInitializable $object, FNInitializable $object2 = NULL /* infinite arguments */) {
+    function add(object $object, object $object2 = NULL /* infinite arguments */) {
     	$value = $this->value();
     	foreach(func_get_args() as $arg) {
-    		if($arg instanceof FNInitializable) $value[] = $arg;
+    		if($arg instanceof object) $value[] = $arg;
     	}
     	return $this->returnObjectWith($value);
     }
@@ -226,10 +236,10 @@ class FNArray extends FNContainer implements \Iterator, \ArrayAccess, FNCountabl
     }
     /**
      * @method containsObject
-     * @param FNInitializable $object
+     * @param object $object
      * @return bool
      */
-    function containsObject(FNInitializable $object) {
+    function containsObject(object $object) {
     	return in_array($object, $this->value());
     }
     /**

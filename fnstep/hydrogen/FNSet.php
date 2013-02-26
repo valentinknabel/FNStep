@@ -46,7 +46,7 @@ class FNSet extends FNContainer implements FNCountable {
     		//remove doubled values
     		$array = array_unique($value,SORT_REGULAR);
     		foreach($array as $key => $val) {
-    			if($val instanceof FNInitializable) {
+    			if($val instanceof object) {
     				continue;
     			} else unset($array[$key]);
     		}
@@ -80,22 +80,22 @@ class FNSet extends FNContainer implements FNCountable {
     }
     /**
      * @method contains
-     * @param FNInitializable $object
+     * @param object $object
      * @return boolean
      */
-    function contains(FNInitializable $object) {
+    function contains(object $object) {
     	return in_array($object, $this->_value);
     }
     /**
      * infinite arguments
-     * @param FNInitializable $object
-     * @param FNInitializable $object2
+     * @param object $object
+     * @param object $object2
      * @return FNSet
      */
-    function add(FNInitializable $object, FNInitializable $object2 = NULL /* infinite arguments */) {
+    function add(object $object, object $object2 = NULL /* infinite arguments */) {
     	$value = $this->value();
     	foreach(func_get_args() as $arg) {
-    		if(!$this->contains($arg) && $arg instanceof FNInitializable) {
+    		if(!$this->contains($arg) && $arg instanceof object) {
     			$value[] = $arg;
     		}
     	}
@@ -103,10 +103,10 @@ class FNSet extends FNContainer implements FNCountable {
     }
     /**
      * @method remove
-     * @param FNInitializable $object
+     * @param object $object
      * @return FNSet
      */
-    function remove(FNInitializable $object) {
+    function remove(object $object) {
     	$temp = $this->_value;
     	foreach($temp as $key => $value) {
     		if($value === $object) {

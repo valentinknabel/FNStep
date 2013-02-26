@@ -8,7 +8,8 @@
 //
 	
  namespace FNFoundation;
- //!CLASSES OF FNSCRIPT\COREFOUNDFNION
+ use object;
+ use FNObject;
  
  /**
   * aadtler

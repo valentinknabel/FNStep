@@ -43,41 +43,41 @@ function n($t) {
 
 /**
  * Creates a FNArray(infinite parameters)
- * @param FNInitializable $obj1
- * @param FNInitializable $obj2
+ * @param object $obj1
+ * @param object $obj2
  * @return FNArray
  */
-function a(FNInitializable $obj1, FNInitializable $obj2=NULL) {
+function a(object $obj1, object $obj2=NULL) {
     return call_user_func(array('FNArray','initWithList'),func_get_args());
 }
 
 /**
  * Creates a FNMutableArray(infinite parameters)
- * @param FNInitializable $obj1
- * @param FNInitializable $obj2
+ * @param object $obj1
+ * @param object $obj2
  * @return FNMutableArray
  */
-function am(FNInitializable $obj1, FNInitializable $obj2=NULL) {
+function am(object $obj1, object $obj2=NULL) {
     return call_user_func(array('FNMutableArray','initWithList'),func_get_args());
 }
 
 /**
  * Creates a FNDictionary(infinite parameters, key-value pairs)
- * @param FNInitializable $key
- * @param FNInitializable $value
+ * @param object $key
+ * @param object $value
  * @return FNDictionary
  */
-function d(FNInitializable $key, FNInitializable $value=NULL) {
+function d(object $key, object $value=NULL) {
     return call_user_func(array('FNDictionary','initWithList'),func_get_args());
 }
 
 /**
  * Creates a FNMutableDictionary(infinite parameters, key-value pairs)
- * @param FNInitializable $key
- * @param FNInitializable $value
+ * @param object $key
+ * @param object $value
  * @return FNMutableDictionary
  */
-function dm(FNInitializable $key, FNInitializable $value=NULL) {
+function dm(object $key, object $value=NULL) {
     return call_user_func(array('FNDictionary','initWithList'),func_get_args());
 }
 

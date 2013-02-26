@@ -8,6 +8,15 @@
 //
 	
 namespace FNFoundation;
+use \Iterator;
+use \ArrayAccess;
+use FNCountable;
+use FNContainer;
+use FNMutable;
+use FNArray;
+use FNSet;
+use FNString;
+
 class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCountable {
     private $position;
     private $tempKeys;
@@ -15,12 +24,12 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     /**
      * Returns an instance for FNDictionary using a list of parameters
      * @param FNString $key1
-     * @param FNInitializable $value1
+     * @param object $value1
      * @param FNString $key2
-     * @param FNInitializable $value2
+     * @param object $value2
      * @param ...
      */
-    static function initWithList(FNString $key1, FNInitializable $value1,FNString $key2 = NULL, FNInitializable $value2 = NULL /* infinite arguments */) {
+    static function initWithList(FNString $key1, object $value1,FNString $key2 = NULL, object $value2 = NULL /* infinite arguments */) {
     	$tempArr = array();
     	$key = '';
     	for($i = 0;$i < func_num_args();$i++) {
@@ -42,7 +51,7 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     }
     
     static function initWithSet(FNSet $keys, FNSet $values) {
-    	return static::initWithArray($keys->arrayWithInstancesOf(FNString::initWith('FNString')),$values->arrayWithInstancesOf(FNString::initWith('FNInitializable')));
+    	return static::initWithArray($keys->arrayWithInstancesOf(FNString::initWith('FNString')),$values->arrayWithInstancesOf(FNString::initWith('object')));
     }
     
     public function __construct($value = NULL) {
@@ -53,10 +62,10 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     
     /**
      * Returns TRUE if the FNDictionary contains the value $value
-     * @param FNInitializable $value
+     * @param object $value
      * @return boolean
      */
-    function contains(FNInitializable $value) {
+    function contains(object $value) {
     	$bool = false;
     	foreach($this->value() as $val) {
     		if($val == $value) {
@@ -67,7 +76,7 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     	return $bool;
     }
     
-    public function add(FNString $key1, FNInitializable $value1,FNString $key2 = NULL, FNInitializable $value2 = NULL /* infinite arguments */) {
+    public function add(FNString $key1, object $value1,FNString $key2 = NULL, object $value2 = NULL /* infinite arguments */) {
     	$value = $this->value();
     	$key = '';
     	for($i = 0;$i < func_num_args();$i++) {
@@ -102,7 +111,7 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     	if(is_array($value)) {
     		$helpArr = array();
     		foreach($value as $key => $val) {
-    			if($val instanceof FNInitializable) {
+    			if($val instanceof object) {
     				$helpArr[$key] = $val;
     			}
     		}
@@ -215,10 +224,10 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
      * 
      * Enter description here ...
      * @param FNString $key
-     * @param FNInitializable $value
+     * @param object $value
      * @return FNDictionary
      */
-    function setValueForKey(FNString $key,FNInitializable $value) {
+    function setValueForKey(FNString $key,object $value) {
     	$array = $this->value();
     	$array[$key->value()] = $value;
     	return $this->returnObjectWith($array);
@@ -226,7 +235,7 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     /**
      * 
      * @param FNString $key
-     * @return FNInitializable
+     * @return object
      */
 	function valueForKey(FNString $key) {
     	$array = $this->value();

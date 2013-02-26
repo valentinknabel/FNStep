@@ -8,6 +8,13 @@
 //
 
 namespace FNFoundation;
+use FNString;
+use FNNumber;
+use FNMutableString;
+use FNArray;
+use FNMutableArray;
+use FNDictionary;
+use FNMutableDictionary;
 
 function FNTodo($message = 'undefined') {
 	echo "TODO: '$message'";
@@ -43,41 +50,41 @@ function n($t) {
 
 /**
  * Creates a FNArray(infinite parameters)
- * @param FNInitializable $obj1
- * @param FNInitializable $obj2
+ * @param object $obj1
+ * @param object $obj2
  * @return FNArray
  */
-function a(FNInitializable $obj1, FNInitializable $obj2=NULL) {
+function a(object $obj1, object $obj2=NULL) {
     return call_user_func(array('FNArray','initWithList'),func_get_args());
 }
 
 /**
  * Creates a FNMutableArray(infinite parameters)
- * @param FNInitializable $obj1
- * @param FNInitializable $obj2
+ * @param object $obj1
+ * @param object $obj2
  * @return FNMutableArray
  */
-function am(FNInitializable $obj1, FNInitializable $obj2=NULL) {
+function am(object $obj1, object $obj2=NULL) {
     return call_user_func(array('FNMutableArray','initWithList'),func_get_args());
 }
 
 /**
  * Creates a FNDictionary(infinite parameters, key-value pairs)
- * @param FNInitializable $key
- * @param FNInitializable $value
+ * @param object $key
+ * @param object $value
  * @return FNDictionary
  */
-function d(FNInitializable $key, FNInitializable $value=NULL) {
+function d(object $key, object $value=NULL) {
     return call_user_func(array('FNDictionary','initWithList'),func_get_args());
 }
 
 /**
  * Creates a FNMutableDictionary(infinite parameters, key-value pairs)
- * @param FNInitializable $key
- * @param FNInitializable $value
+ * @param object $key
+ * @param object $value
  * @return FNMutableDictionary
  */
-function dm(FNInitializable $key, FNInitializable $value=NULL) {
+function dm(object $key, object $value=NULL) {
     return call_user_func(array('FNDictionary','initWithList'),func_get_args());
 }
 
@@ -100,7 +107,7 @@ function cstring($value) {
     	case RESOURCE:
     		return strval($value);
     	case OBJECT:
-    		if($value instanceof FNObject) {
+    		if($value instanceof object) {
 	    		if($value-> respondsToMethod('__toString')) {
 		    		return $value->__toString();
 	    		} else throw new FNTypeException($value::cls().' cannot be concatenated.');
@@ -128,7 +135,7 @@ function carray($value) {
     	case RESOURCE:
     		return array($value);
     	case OBJECT:
-    		if($value instanceof FNObject) {
+    		if($value instanceof object) {
 	    		if($value-> respondsToMethod('carray')) { 
 	    			return $value->carray(); 
 	    		} else throw new FNTypeException($value::cls().' cannot be converted to an array.');
@@ -154,7 +161,7 @@ function cnumber($value) {
     	case RESOURCE:
     		return intval($value);
     	case OBJECT:
-    		if($value instanceof FNObject) {
+    		if($value instanceof object) {
 	    		if($value instanceof FNNumber) return $value-> value();
 	    		if($value-> respondsToMethod('count')) {
 		    		return $value->count();
