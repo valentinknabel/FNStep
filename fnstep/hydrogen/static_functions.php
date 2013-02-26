@@ -1,4 +1,11 @@
 <?PHP
+//
+//!FNStep
+//!static_functions.php
+//
+//!Created by Valentin Knabel on 26.02.13
+//!Copyright © 2013 Valentin Knabel. All rights reserved.
+//
 
 namespace FNFoundation;
 
@@ -170,5 +177,6 @@ function cint($value) {
 function cfloat($value) {
 	return floatval(cnumber($value));
 }
-
+	
 ?>
+						

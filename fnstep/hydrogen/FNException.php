@@ -6,7 +6,7 @@
 //!Created by Valentin Knabel on 26.02.13
 //!Copyright © 2013 Valentin Knabel. All rights reserved.
 //
-
+	
 namespace FNFoundation;
 
 class FNException extends \Exception implements object {
@@ -113,6 +113,6 @@ class FNException extends \Exception implements object {
 }
 
 class FNTypeException extends FNException {}
-
+	
 ?>
 						
