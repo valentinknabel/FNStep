@@ -11,6 +11,7 @@ require('const.php');
 require('static_functions.php');
 
 require('FNObject.php');
+require('FNException.php');
 require('FNContainer.php');
 require('FNString.php');
 require('FNNumber.php');

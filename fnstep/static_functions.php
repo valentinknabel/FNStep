@@ -96,14 +96,14 @@ function cstring($value) {
     		if($value instanceof FNObject) {
 	    		if($value-> respondsToMethod('__toString')) {
 		    		return $value->__toString();
-	    		} else throw new NFTypeException($value::cls().' cannot be concatenated.');
+	    		} else throw new FNTypeException($value::cls().' cannot be concatenated.');
     		} else {
 	    		if(function_exists(array($value, '__toString'))) {
 		    		return $value->__toString();
-	    		} else throw new NFTypeException(get_class($value).' cannot be concatenated.');
+	    		} else throw new FNTypeException(get_class($value).' cannot be concatenated.');
     		}
     	default:
-    		throw new NFTypeException('unknown type '.gettype($value));
+    		throw new FNTypeException('unknown type '.gettype($value));
     		
     }
 }
@@ -124,12 +124,12 @@ function carray($value) {
     		if($value instanceof FNObject) {
 	    		if($value-> respondsToMethod('carray')) { 
 	    			return $value->carray(); 
-	    		} else throw new NFTypeException($value::cls().' cannot be converted to an array.');
+	    		} else throw new FNTypeException($value::cls().' cannot be converted to an array.');
     		} else {
-	    		throw new NFTypeException(get_class($value).' cannot be converted to an array.');
+	    		throw new FNTypeException(get_class($value).' cannot be converted to an array.');
     		}
     	default:
-    		throw new NFTypeException('unknown type '.gettype($value));
+    		throw new FNTypeException('unknown type '.gettype($value));
     		
     }
 }
@@ -151,14 +151,14 @@ function cnumber($value) {
 	    		if($value instanceof FNNumber) return $value-> value();
 	    		if($value-> respondsToMethod('count')) {
 		    		return $value->count();
-	    		} else throw new NFTypeException($value::cls().' cannot be counted.');
+	    		} else throw new FNTypeException($value::cls().' cannot be counted.');
     		} else {
 	    		if(function_exists(array($value, 'count'))) {
 		    		return $value->count();
-	    		} else throw new NFTypeException('object cannot be counted.');
+	    		} else throw new FNTypeException('object cannot be counted.');
     		}
     	default:
-    		throw new NFTypeException('unknown type '.gettype($value));
+    		throw new FNTypeException('unknown type '.gettype($value));
     		
     }
 }
