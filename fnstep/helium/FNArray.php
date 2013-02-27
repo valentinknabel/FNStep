@@ -68,13 +68,20 @@ class FNArray extends FNContainer implements Iterator, ArrayAccess, FNCountable 
     function immutableCopy() {
     	return FNArray::initWith($this->value());
     }
-##Countable
+##FNCountable
     /**
      *(non-PHPdoc)
      * @see FNCountable::count()
      */
     function count() {
-    	return FNNumber::initWith(count($this->value()));
+    	return count($this->value());
+    }
+    /**
+     *(non-PHPdoc)
+     * @see FNCountable::count()
+     */
+    function size() {
+    	return FNNumber::initWith($this-> count());
     }
 ##Iterator
     /**

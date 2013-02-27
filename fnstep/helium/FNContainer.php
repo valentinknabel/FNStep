@@ -10,6 +10,7 @@
  namespace FNFoundation;
  use object;
  use FNObject;
+ use \Countable;
  
  /**
   * aadtler
@@ -20,12 +21,13 @@
   */
  interface FNMutable {} //@MODIFIED - new interface
  
- interface FNCountable {
+ interface FNCountable extends Countable {
+     
      /**
-      * Counts the elements
-      * @return FNNumber
+      *
+      *	@return FNNumber
       */
-     public function count();
+     public function size();
  }
  
  abstract class FNContainer extends FNObject {
