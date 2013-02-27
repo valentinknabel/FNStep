@@ -30,7 +30,6 @@
  
  abstract class FNContainer extends FNObject {
      protected $_value;
-     static private $_classes;//@MODIFIED - new property
      
      /**
       * @abstract @static isValidValue
@@ -75,16 +74,6 @@
      public function __construct($value = NULL) {
      	if(static::isValidValue($value)) {
      		$this->_value = static::convertValue($value);
-     		
-     		//@MODIFIED - save if immutable
-     		if($this-> isMutable()) {
-     			if(!self:: $_classes) self:: $_classes = array();
-     			if(!isset(self:: $_classes[get_class($this)])) self:: $_classes[get_class($this)] = array('values'=>array(), 'objects'=>array());
-     			$length = count(self:: $_classes[get_class($this)]['values']);
-     			self:: $_classes[get_class($this)]['values'][$length] = $this-> value();
-     			self:: $_classes[get_class($this)]['objects'][$length] = $this;
-     		}
-     		//@MODEND
      	}
      }
      /**
@@ -93,14 +82,6 @@
       * @return FNContainer; NULL on failure
       */
      static function initWith($value) {
-     	//@MODIFIED - return if not saved
-     	if(!isset(self:: $_classes)) self:: $_classes = array();
-     	if(!isset(self:: $_classes[get_called_class()])) self:: $_classes[get_called_class()] = array('values'=>array(), 'objects'=>array());
-     	
-     	$index = array_search($value, self:: $_classes[get_called_class()]['values']);
-     	if($index !== FALSE)
-     		return self:: $_classes[get_called_class()]['objects'][$index];
-     	//@MODEND
      	if(static::isValidValue($value)) {
      		return new static($value);
      	} else return NULL;
