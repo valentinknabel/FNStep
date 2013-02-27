@@ -21,6 +21,10 @@ function FNTodo($message = 'undefined') {
 }
 
 //!STATIC FUNCTIONS
+function object($value) {
+	FNTodo("Convert value to object");
+	return FNObject::init();
+}
 /**
  * Creates a FNString
  * @param nativeType $t
