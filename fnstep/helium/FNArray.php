@@ -178,7 +178,7 @@ class FNArray extends FNContainer implements Iterator, ArrayAccess, FNCountable 
      * @param object $value
      * @return FNSArray
      */
-    function setvalueForIndex(FNNumber $index,object $value) {
+    function setValueForIndex(FNNumber $index,object $value) {
     	$array = $this->value();
     	$array[$index->value()] = $value;
     	return $this->returnObjectWith($array);
