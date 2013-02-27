@@ -76,6 +76,7 @@ class FNException extends Exception implements object {
 }
 
 class FNTypeException extends FNException {}
-	
+class FNUnimplementedFunctionError extends FNException {}
+class FNUnimplementedMethodError extends FNUnimplementedFunctionError {}
 ?>
 						
