@@ -9,7 +9,7 @@
 namespace FNFoundation;
 use object;
 
-trait FNDefaultObjectImplementation implements object {
+trait FNDefaultObject implements object {
 	final protected static function alloc() {
 		return new static();
 	}

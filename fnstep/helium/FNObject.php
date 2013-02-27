@@ -9,10 +9,10 @@
 
 namespace FNFoundation;
 use object;
-use FNDefaultObjectImplementation;
+use FNDefaultObject;
 
 class FNObject implements object {
-	use FNDefaultObjectImplementation;
+	use FNDefaultObject;
 	
 	protected function __construct() {}
 }
