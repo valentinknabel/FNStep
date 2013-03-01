@@ -67,14 +67,16 @@ function cnumber($value) {
 	    case RESOURCE_TYPE:
 	        return intval($value);
 	    case OBJECT_TYPE:
+	    	if($value instanceof Countable)
+	    		return count($value);
 	    	if($value instanceof FNNumber)
 	        	return $value-> value();
 	    	if($value instanceof FNIdentifiable)
-	        	return cnum($value-> numericIdentifier());
+	        	return cnumber($value-> numericIdentifier());
 	        if($value instanceof Object)
-	        	return cnum($value-> __toString());
+	        	return cnumber($value-> __toString());
 	        if(function_exists(array($value, '__toString')))
-	        	return cnum($value-> __toString());
+	        	return cnumber($value-> __toString());
 	        return 1;
 	    default:
 	        throw FNVersionException('Update FNFoundation: a new PHP-type has been added');
@@ -114,37 +116,45 @@ function ms($value = '') {
  * @return string
  */
 function cstring($value = '') {
-	switch(gettype($value)) {
-	    case NULL_TYPE:
-	    	return '';
-	    case BOOLEAN_TYPE:
-	    	return $value ? 'true' : 'false';
-	    case INTEGER_TYPE:
-	    	return strval($value);
-	    case FLOAT_TYPE:
-	    	return strval($value);
-	    case STRING_TYPE:
-	    	return sprintf("%f", $value);
-	    case ARRAY_TYPE:
-	        $string = '';
-	        foreach($value as $needle) {
-		        $string .= cstring($needle);
-	        }
-	        return $string;
-	    case RESOURCE_TYPE:
-	        return strval($value);
-	    case OBJECT_TYPE:
-	    	if($value instanceof FNString)
-	        	return $value-> value();
-	    	if($value instanceof FNIdentifiable)
-	        	return cnum($value-> identifier());
-	        if($value instanceof Object)
-	        	return $value-> __toString();
-	        if(function_exists(array($value, '__toString')))
-	        	return $value-> __toString();
-	        return '<'.get_class($value).'>';
-	    default:
-	        throw FNVersionException('Update FNFoundation: a new PHP-type has been added');
+	if(func_num_args() == 1) {
+		switch(gettype($value)) {
+		    case NULL_TYPE:
+		    	return '';
+		    case BOOLEAN_TYPE:
+		    	return $value ? 'true' : 'false';
+		    case INTEGER_TYPE:
+		    	return strval($value);
+		    case FLOAT_TYPE:
+		    	return strval($value);
+		    case STRING_TYPE:
+		    	return sprintf("%f", $value);
+		    case ARRAY_TYPE:
+		        $string = '';
+		        foreach($value as $needle) {
+		            $string .= cstring($needle);
+		        }
+		        return $string;
+		    case RESOURCE_TYPE:
+		        return strval($value);
+		    case OBJECT_TYPE:
+		    	if($value instanceof FNString)
+		        	return $value-> value();
+		    	if($value instanceof FNIdentifiable)
+		        	return cnum($value-> identifier());
+		        if($value instanceof Object)
+		        	return $value-> __toString();
+		        if(function_exists(array($value, '__toString')))
+		        	return $value-> __toString();
+		        return serialize($value);
+		    default:
+		        throw FNVersionException('Update FNFoundation: a new PHP-type has been added');
+		}
+	} else {
+		$string = '';
+		foreach(func_get_args() as $arg) {
+			$string .= cstring($arg);
+		}
+		return $string;
 	}
 }
 
