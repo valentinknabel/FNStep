@@ -10,14 +10,10 @@
 namespace FNFoundation;
 use \Iterator;
 use \ArrayAccess;
-use FNCountable;
-use FNContainer;
-use FNMutable;
-use FNArray;
-use FNSet;
-use FNString;
 
-class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCountable {
+class FNDictionary extends FNContainer implements \Iterator, FNTraversable, \ArrayAccess, FNCountable {
+    use FNDefaultCountable;
+    
     private $position;
     private $tempKeys;
     
@@ -144,7 +140,7 @@ class FNDictionary extends FNContainer implements \Iterator, \ArrayAccess, FNCou
     * @see FNCountable::count()
     */
     function count() {
-    	return FNNumber::initWith(count($this->value()));
+    	return count($this->value());
     }
     ##Iterator
     /**

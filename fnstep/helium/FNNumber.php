@@ -8,11 +8,10 @@
 //
 
 namespace FNFoundation;
-use FNContainer;
-use FNCountable;
-use FNString;
 
 class FNNumber extends FNContainer implements FNCountable {
+    use FNDefaultCountable;
+    
     const ROUND_HALF_UP = PHP_ROUND_HALF_UP;
     const ROUND_HALF_DOWN = PHP_ROUND_HALF_DOWN;
     const ROUND_HALF_EVEN = PHP_ROUND_HALF_EVEN;

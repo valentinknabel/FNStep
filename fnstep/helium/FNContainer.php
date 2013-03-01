@@ -8,27 +8,6 @@
 //
 	
  namespace FNFoundation;
- use object;
- use FNObject;
- use \Countable;
- 
- /**
-  * aadtler
-  * Valentin Knabel
-  * 20.09.12
-  *
-  * Implement this interface to show that instances of the class are mutable
-  */
- interface FNMutable {} //@MODIFIED - new interface
- 
- interface FNCountable extends Countable {
-     
-     /**
-      *
-      *	@return FNNumber
-      */
-     public function size();
- }
  
  abstract class FNContainer extends FNObject {
      protected $_value;
@@ -39,7 +18,7 @@
       * @return boolean
       */
      static function isValidValue($value) { //@MODIFIED - not abstract(warning)
-     	throw new FNUnimplementedMethodError();
+     	throw new FNUnimplementedMethod();
      }
      
      /**
@@ -48,14 +27,14 @@
       * @return mixed
       */
      static function convertValue($value) { //@MODIFIED - not abstract(warning)
-     	throw new FNUnimplementedMethodError();
+     	throw new FNUnimplementedMethod();
      }
      
      /**
       * @abstract isMutable
       * @return boolean
       */
-     public function isMutable() {//@MODIEFIED - not abstract
+     public function isMutable() {//@MODIFIED - not abstract
      	return $this instanceof FNMutable;
      }
      

@@ -9,8 +9,6 @@
 	
 namespace FNFoundation;
 use \ArrayAccess;
-use FNIdentifiable;
-use object;
 
 interface FNArrayAccess extends ArrayAccess {
 	function idExists(FNIdentifiable $id);
@@ -19,7 +17,7 @@ interface FNArrayAccess extends ArrayAccess {
 	function valueForId(FNIdentifiable $id);
 }
 
-trait FNDefaultArrayAccess implements FNArrayAccess {
+trait FNDefaultArrayAccess {
 	function offsetExists($offset) {
 		return $this-> idExists(FNIdentifier::initWith($offset));
 	}

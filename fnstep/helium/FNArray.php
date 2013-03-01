@@ -8,17 +8,12 @@
 //
 	
 namespace FNFoundation;
-use FNContainer;
 use \Iterator;
 use \ArrayAccess;
-use FNCountable;
-use object;
-use FNNumber;
-use FNDictionary;
-use FNMutable;
-use FNSet;
 
-class FNArray extends FNContainer implements Iterator, ArrayAccess, FNCountable {
+class FNArray extends FNContainer implements FNTraversable, Iterator, FNArrayAccess, FNCountable {
+	use FNDefaultCountable;
+	
 	private $position;
 	
 	/**
@@ -75,13 +70,6 @@ class FNArray extends FNContainer implements Iterator, ArrayAccess, FNCountable 
      */
     function count() {
     	return count($this->value());
-    }
-    /**
-     *(non-PHPdoc)
-     * @see FNCountable::count()
-     */
-    function size() {
-    	return FNNumber::initWith($this-> count());
     }
 ##Iterator
     /**

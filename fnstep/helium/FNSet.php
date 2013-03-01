@@ -8,14 +8,9 @@
 //
 
 namespace FNFoundation;
-use object;
-use FNCountable;
-use FNContainer;
-use FNArray;
-use FNMutable;
-use FNString;
 
 class FNSet extends FNContainer implements FNCountable {
+    use FNDefaultCountable;
     //equal for FNContainer means -isEqualTo
     //equal for primitives means ==
     const COMPARE_EQUAL = 1;
@@ -66,7 +61,7 @@ class FNSet extends FNContainer implements FNCountable {
      * @see FNCountable::count()
      */
     function count() {
-    	return FNNumber::initWith(count($this->value()));
+    	return count($this->value());
     }
     
     //@MODIFIED

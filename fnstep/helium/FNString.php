@@ -8,13 +8,10 @@
 //
 
 namespace FNFoundation;
-use FNContainer;
-use FNCountable;
-use FNNumber;
-use FNMutable;
-use FNArray;
 
 class FNString extends FNContainer implements FNCountable {
+    use FNDefaultCountable;
+    
     const CASE_LOWER = MB_CASE_LOWER;
     const CASE_UPPER = MB_CASE_UPPER;
     const CASE_TITLE = MB_CASE_TITLE;
@@ -149,13 +146,13 @@ class FNString extends FNContainer implements FNCountable {
     }
     /**
      * @method count
-     * @return FNNumber
+     * @return int
      */
     public function count() {
     	if(function_exists('mb_strlen'))
-    		return FNNumber::initWith(mb_strlen($this->value(),FNString::STANDARD_ENCODING));
-    	else return FNNumber::initWith(strlen(utf8_decode($this->value())));
-    }		
+    		return mb_strlen($this->value(),FNString::STANDARD_ENCODING);
+    	else return strlen(utf8_decode($this->value()));
+    }
     public function __toString() {
     	return $this->value();
     }
@@ -172,6 +169,7 @@ class FNString extends FNContainer implements FNCountable {
     		return $this->returnObjectWith(mb_substr($this->value(),$start->value(), $length, FNString::STANDARD_ENCODING));
     	} else return $this->returnObjectWith(substr($this->value(), $start->value(),$length));
     }
+    
     /**
      * @method trimWidth
      * @param FNNumber $start
@@ -449,6 +447,14 @@ class FNString extends FNContainer implements FNCountable {
      */
     function firstCharacterToLowerCase() {
     	return $this->returnObjectWith(lcfirst($this->value,$data->value));
+    }
+    
+    /**
+     * @method firstCharacterToUpperCase
+     * @return FNString
+     */
+    function firstCharacterToUpperCase() {
+    	return $this->returnObjectWith(ucfirst($this->value,$data->value));
     }
     
 ##RegExp	
