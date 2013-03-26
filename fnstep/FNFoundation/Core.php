@@ -69,6 +69,13 @@ function cnumber($value) {
 	    case OBJECT_TYPE:
 	    	if($value instanceof Countable)
 	    		return count($value);
+	    	if($value instanceof Traversable) {
+		    	$count = 0;
+		    	foreach($value as $needle) {
+			    	$count++;
+		    	}
+		    	return $count;
+	    	}
 	    	if($value instanceof FNNumber)
 	        	return $value-> value();
 	    	if($value instanceof FNIdentifiable)
@@ -131,12 +138,21 @@ function cstring($value = '') {
 		    case ARRAY_TYPE:
 		        $string = '';
 		        foreach($value as $needle) {
+		        	if($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
 		            $string .= cstring($needle);
 		        }
 		        return $string;
 		    case RESOURCE_TYPE:
 		        return strval($value);
 		    case OBJECT_TYPE:
+		    	if($value instanceof Traversable) {
+			    	$string = '';
+			    	foreach($value as $needle) {
+				    	if($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
+				    	$string .= cstring($needle);
+			    	}
+			    	return $string;
+		    	}
 		    	if($value instanceof FNString)
 		        	return $value-> value();
 		    	if($value instanceof FNIdentifiable)
@@ -1040,6 +1056,15 @@ class FNCommonIdentifier extends FNIdentifier {
 	}
 }
 
+interface FNMutableContainer extends FNMutable {
+	/**
+	 * Sets the value of the container.
+	 * @arg mixed $value
+	 * @return void
+	 */
+	public function setValue($value);
+}
+
 abstract class FNContainer extends FNObject implements FNComparable, FNCountable, FNValidatable {
 	use FNDefaultCountable;
 	
@@ -1181,8 +1206,154 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
 	
 }
 
-FNTodo('FNNil');
-FNTodo('FNBoolean');
+class FNNil extends FNContainer  {
+	
+	//!FNObject
+	/**
+	 * Implement this method instead of __call.
+	 * @arg FNString $function
+	 * @arg array $arguments
+	 * @return mixed
+	 */
+	public function unresolvedMethod(FNString $function, array $arguments) {
+		if(DEBUG) {
+			throw new FNUnresolvedMethod($function)
+		} else return NULL;
+	}
+	
+	/**
+	 * Implement this method instead of __callStatic.
+	 * @arg FNString $function
+	 * @arg array $arguments
+	 * @return mixed
+	 */
+	public static function unresolvedStaticMethod(FNString $function, array $arguments) {
+		if(DEBUG) {
+			throw new FNUnresolvedStaticsMethod($function)
+		} else return NULL;
+	}
+	
+	//!FNValidatable
+	/**
+	 * Returns if the value is valid.
+	 * @return boolean
+	 */
+	public static function isValidValue($value) {
+		return TRUE;
+	}
+	
+	/**
+	 * Converts the given value for inner class use.
+	 * @return mixed
+	 */
+	public static function convertValue($value) {
+		return NULL;
+	}
+	
+}
+
+class FNBoolean extends FNContainer {
+	/**
+     * Returns a mutable copy of the current object
+     * @return FNContainer,FNMutable
+     */
+    public function mutableCopy() {
+	    return FNBoolean:: initWith($this-> value());
+    }
+    
+     /**
+      * Returns an immutable copy of the current object
+      * @return FNContainer
+      */
+    public function immutableCopy() {
+	    return FNMutableBoolean:: initWith($this-> value());
+    }
+	
+	/**
+	 * Returns an FNBoolean containg TRUE
+	 * @return FNBoolean
+	 */
+	public static function yes() {
+		return static:: initWith(TRUE);
+	}
+	
+	/**
+	 * Returns an FNBoolean containg FALSE
+	 * @return FNBoolean
+	 */
+	public static function no() {
+		return static:: initWith(FALSE);
+	}
+	
+	
+	//!FNValidatable
+	/**
+	 * Returns if the value is valid.
+	 * @return boolean
+	 */
+	public static function isValidValue($value) {
+		return TRUE;
+	}
+	
+	/**
+	 * Converts the given value for inner class use.
+	 * @return mixed
+	 */
+	public static function convertValue($value) {
+		return $value ? TRUE : FALSE;
+	}
+}
+
+class FNMutableBoolean extends FNBoolean implements FNMutableContainer {
+
+	//!FNMutableContainer
+	/**
+	 * Sets the value of the container.
+	 * @arg mixed $value
+	 * @return void
+	 */
+	public function setValue($value) {
+		return $this-> returnObjectWith($value);
+	}
+}
+
+class FNNumber extends FNContainer implements FNCountable {
+	
+	/**
+     * Returns a mutable copy of the current object
+     * @return FNContainer,FNMutable
+     */
+    public function mutableCopy() {
+	    return FNNumber:: initWith($this-> value());
+    }
+    
+     /**
+      * Returns an immutable copy of the current object
+      * @return FNContainer
+      */
+    public function immutableCopy() {
+	    return FNMuatbleNumber:: initWith($this-> value());
+    }
+	
+	//!FNCountable
+	/**
+	 * Implement size instead.
+	 * @return int
+	 */
+	public function count() {
+		return cint($this-> value());
+	}
+	
+	/**
+	 * Returns the size.
+	 * @return FNNumber
+	 */
+	public function size() {
+		return n($this-> count());
+	}
+	
+}
+
 FNTodo('FNNumber');
 FNTodo('FNString');
 FNTodo('FNArrayAccess');
@@ -1193,6 +1364,6 @@ FNTodo('FNSet');
 FNTodo('FNArray');
 FNTodo('FNDictionary');
 FNTodo('FNResource');
-
+NFTodo('FNNil ergänzen');
 ?>
 						
