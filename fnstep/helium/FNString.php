@@ -128,8 +128,6 @@ class FNString extends FNContainer implements FNCountable {
     	else return '';
     }
     
-    //@MODIFIED
-    
     /**
      *(non-PHPdoc)
      * @see FNScript\FNFoundation.FNContainer::mutableCopy()
