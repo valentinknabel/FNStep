@@ -8,6 +8,7 @@
 //
 	
 namespace FNFoundation\Additions;
+use FNFoundation\FNObject;
 
 class FNProxy extends FNObject {
 	
