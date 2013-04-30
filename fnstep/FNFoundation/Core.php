@@ -8,10 +8,6 @@
 //
 
 namespace FNFoundation;
-use \Exception;
-use \Countable;
-use \Iterator;
-use \ArrayAccess;
 
 FNTodo('FNString');
 FNTodo('FNArrayAccess');

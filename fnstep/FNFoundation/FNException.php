@@ -31,12 +31,12 @@ class FNException extends Exception implements Object {
 	
 	/**
 	 * Returns the description of the current object.
-	 * @return FNString
+	 * @return string
 	 */
-	public function description() {
+	public function __toString() {
 		if($this->previous())
-			return s(static::cls(),': #',$this->code(),' \'',$this->message(),'\' {',$this->previous(),'}');
-		else return s(static::cls(),': #',$this->code(),' \'',$this->message(),'\'');
+			return cstring(static::cls(),': #',$this->code(),' \'',$this->message(),'\' {',$this->previous(),'}');
+		else return cstring(static::cls(),': #',$this->code(),' \'',$this->message(),'\'');
 	}
 	
 	//!Implementation
@@ -113,6 +113,8 @@ class FNUnresolvedFunction extends FNResolvabilityException {}
 class FNUnresolvedMethod extends FNUnresolvedFunction {}
 class FNUnresolvedProperty extends FNResolvabilityException {}
 class FNSetUnresolvedProperty extends FNUnresolvedProperty {}
-	
+
+class FNArgumentException extends FNException {}
+
 ?>
 						

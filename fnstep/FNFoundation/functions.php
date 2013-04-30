@@ -7,10 +7,21 @@
 //!Copyright (c) 2013 Valentin Knabel. All rights reserved.
 //
 
-
+use FNFoundation\FNContainer;
+use FNFoundation\Object;
+use FNFoundation\FNIdentifiable;
 use FNFoundation\FNString;
 use FNFoundation\FNArray;
 use FNFoundation\FNTodoException;
+use FNFoundation\FNNumber;
+use FNFoundation\FNSet;
+use FNFoundation\FNMutableSet;
+use FNFoundation\FNMutableString;
+use FNFoundation\FNDictionary;
+use FNFoundation\FNMutableDictionary;
+use FNFoundation\FNVersionException;
+use FNFoundation\FNMutableArray;
+use FNFoundation\FNArgumentException;
 
 //!––––––––––––––––––––––––––––––––
 //!constants
@@ -29,6 +40,8 @@ define('OBJECT_TYPE', 'object');
 
 /**
  * Throws an exception to signalize what's up next.
+ * @param string $message
+ * @throws FNFoundation\FNTodoException
  * @return void
  */
 function FNTodo($message = '') {
@@ -38,6 +51,7 @@ function FNTodo($message = '') {
 /**
  * Puts the given value into a container.
  * @arg mixed $value
+ * @param $value
  * @return FNContainer
  */
 function con($value) {
@@ -46,6 +60,7 @@ function con($value) {
 
 /**
  * Returns a number.
+ * @param $value
  * @return FNNumber
  */
 function n($value) {
@@ -56,7 +71,7 @@ function n($value) {
  * Returns a number.
  * @arg mixed $value
  * @param $value
- * @throws
+ * @throws FNFoundation\FNVersionException
  * @return number
  */
 function cnumber($value) {
@@ -80,7 +95,8 @@ function cnumber($value) {
 	    		return count($value);
 	    	if($value instanceof Traversable) {
 		    	$count = 0;
-		    	foreach($value as $needle) {
+                /** @noinspection PhpUnusedLocalVariableInspection */
+                foreach($value as $needle) {
 			    	$count++;
 		    	}
 		    	return $count;
@@ -92,16 +108,18 @@ function cnumber($value) {
 	        if($value instanceof Object)
 	        	return cnumber($value-> __toString());
 	        if(method_exists($value, '__toString'))
-	        	return cnumber($value-> __toString());
+                /** @noinspection PhpUndefinedMethodInspection */
+                return cnumber($value-> __toString());
 	        return 1;
 	    default:
-	        throw FNVersionException('Update FNFoundation: a new PHP-type has been added');
+	        throw new FNVersionException('Update FNFoundation: a new PHP-type has been added');
 	}
 }
 
 /**
  * Returns an integer.
  * @arg mixed $value
+ * @param $value
  * @return int
  */
 function cint($value) {
@@ -111,24 +129,31 @@ function cint($value) {
 /**
  * Returns a string.
  * @arg mixed $value = NULL
+ * @param string $value
  * @return FNString
  */
-function s($value = '') {
+function s(/** @noinspection PhpUnusedParameterInspection */
+    $value = '') {
 	return FNString:: initWith(func_get_args());
 }
 
 /**
  * Returns a mutable string.
  * @arg mixed $value = NULL
+ * @param string $value
  * @return FNMutableString
  */
-function ms($value = '') {
-	return FNString:: initWith(func_get_args());
+function ms(/** @noinspection PhpUnusedParameterInspection */
+    $value = '') {
+	return FNMutableString:: initWith(func_get_args());
 }
 
 /**
  * Returns a string.
  * @arg mixed $value = NULL
+ * @param string $value
+ * @throws FNFoundation\FNArgumentException
+ * @throws FNFoundation\FNVersionException
  * @return string
  */
 function cstring($value = '') {
@@ -146,7 +171,8 @@ function cstring($value = '') {
 		    	return $value;
 		    case ARRAY_TYPE:
 		        $string = '';
-		        foreach($value as $needle) {
+                /** @noinspection PhpWrongForeachArgumentTypeInspection */
+                foreach($value as $needle) {
 		        	if($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
 		            $string .= cstring($needle);
 		        }
@@ -165,14 +191,15 @@ function cstring($value = '') {
 		    	if($value instanceof FNString)
 		        	return $value-> value();
 		    	if($value instanceof FNIdentifiable)
-		        	return cnum($value-> identifier());
+		        	return cnumber($value-> identifier());
 		        if($value instanceof Object)
 		        	return $value-> __toString();
 		        if(method_exists($value, '__toString'))
-		        	return $value-> __toString();
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    return $value-> __toString();
 		        return serialize($value);
 		    default:
-		        throw FNVersionException('Update FNFoundation: a new PHP-type has been added');
+		        throw new FNVersionException('Update FNFoundation: a new PHP-type has been added');
 		}
 	} else {
 		$string = '';
@@ -186,36 +213,43 @@ function cstring($value = '') {
 /**
  * Returns an array.
  * @arg mixed $value = NULL
+ * @param null $value
  * @return FNArray
  */
-function a($value = NULL) {
+function a(/** @noinspection PhpUnusedParameterInspection */
+    $value = NULL) {
 	return FNArray::initWith(call_user_func_array('carray', func_get_args()));
 }
 
 /**
  * Returns a mutable array.
  * @arg mixed $value = NULL
+ * @param null $value
  * @return FNMutableArray
  */
-function ma($value = NULL) {
+function ma(/** @noinspection PhpUnusedParameterInspection */
+    $value = NULL) {
 	return FNMutableArray::initWith(call_user_func_array('carray', func_get_args()));
 }
 
 /**
  * Returns an array.
  * @arg array $value = NULL
+ * @param null $value
  * @return array
  */
-function carray($value = NULL) {
+function carray(/** @noinspection PhpUnusedParameterInspection */
+    $value = NULL) {
 	return carraya(func_get_args());
 }
 
 /**
  * Returns an array.
  * @arg array
+ * @param null $value
  * @return array
  */
-function carraya($value = NULL) {
+function carraya($value) {
 	return array_values($value);
 }
 
@@ -223,9 +257,12 @@ function carraya($value = NULL) {
  * Returns a dictionary.
  * @arg mixed $key = NULL
  * @arg mixed $value = NULL
+ * @param null $key
+ * @param null $value
  * @return FNDictionary
  */
-function d($key = NULL, $value = NULL) {
+function d(/** @noinspection PhpUnusedParameterInspection */
+    $key = NULL, $value = NULL) {
 	return FNDictionary::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
@@ -233,9 +270,12 @@ function d($key = NULL, $value = NULL) {
  * Returns a mutable dictionary.
  * @arg mixed $key = NULL
  * @arg mixed $value = NULL
+ * @param null $key
+ * @param null $value
  * @return FNMutableDictionary
  */
-function md($key = NULL, $value = NULL) {
+function md(/** @noinspection PhpUnusedParameterInspection */
+    $key = NULL, $value = NULL) {
 	return FNMutableDictionary::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
@@ -243,38 +283,46 @@ function md($key = NULL, $value = NULL) {
  * Returns a dictionary.
  * @arg mixed $key = NULL
  * @arg mixed $value = NULL
+ * @param null $key
+ * @param null $value
  * @return FNDictionary
  */
-function cdict($key = NULL, $value = NULL) {
+function cdict(/** @noinspection PhpUnusedParameterInspection */
+    $key = NULL, $value = NULL) {
 	FNTodo(__FUNCTION__);
 }
 
 /**
  * Returns a set.
  * @arg mixed $value = NULL
+ * @param null $value
  * @return FNSet
  */
-function set($value = NULL) {
+function set(/** @noinspection PhpUnusedParameterInspection */
+    $value = NULL) {
 	return FNSet::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
 /**
  * Returns a mutable set.
  * @arg mixed $value = NULL
+ * @param null $value
  * @return FNMutableSet
  */
-function mset($value = NULL) {
+function mset(/** @noinspection PhpUnusedParameterInspection */
+    $value = NULL) {
 	return FNMutableSet::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
 /**
  * Returns a dictionary.
  * @arg mixed $value = NULL
- * @return FNDictionary
+ * @param null $value
+ * @return void FNDictionary
  */
-function cset($value = NULL) {
+function cset(/** @noinspection PhpUnusedParameterInspection */
+    $value = NULL) {
 	FNTodo(__FUNCTION__);
 }
-	
-?>
+
 						

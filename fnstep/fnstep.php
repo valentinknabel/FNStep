@@ -7,6 +7,8 @@
 //!Copyright (c) 2013 Valentin Knabel. All rights reserved.
 //
 
+use FNFoundation\FNContainer;
+
 require('FNFoundation/functions.php');
 require('FNFoundation/FNObject.php');
 require('FNFoundation/FNException.php');
@@ -20,6 +22,9 @@ require('FNFoundation/FNArrayAccess.php');
 require('FNFoundation/FNSet.php');
 require('FNFoundation/FNArray.php');
 
-echo s(a("Hello", " ", "World"))."!";
+//print_r(hash_algos());
+$var = s();
+echo var_dump($var->isKindOf(FNContainer::cls()));
 
-?>					
+
+?>

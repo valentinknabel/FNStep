@@ -8,6 +8,7 @@
 //
 	
 namespace FNFoundation;
+use FNFoundation\FNNumber;
 
 class FNString extends FNContainer {
 	const CASE_LOWER = MB_CASE_LOWER;
@@ -43,20 +44,22 @@ class FNString extends FNContainer {
     const STANDARD_ENCODING = FNString::UTF_8;
 	
 	//!FNValidatable
-	/**
-	 * Returns if the value is valid.
-	 * @return boolean
-	 */
+    /**
+     * Returns if the value is valid.
+     * @param $value
+     * @return boolean
+     */
 	public static function isValidValue($value) {
 		if(is_string($value) || is_numeric($value) || $value == NULL || $value instanceof FNContainer || is_array($value))
     		return true;
     	return false;
 	}
-	
-	/**
-	 * Converts the given value for inner class use.
-	 * @return mixed
-	 */
+
+    /**
+     * Converts the given value for inner class use.
+     * @param $value
+     * @return mixed
+     */
 	public static function convertValue($value) {
         return cstring($value);
 	}
@@ -67,7 +70,7 @@ class FNString extends FNContainer {
 	 * @return FNNumber
 	 */
 	public function size() {
-		return mb_strlen($this-> value, FNString:: STANDARD_ENCODING);
+		return mb_strlen($this-> value(), FNString:: STANDARD_ENCODING);
 	}
 
 	//!FNContainer
@@ -76,7 +79,7 @@ class FNString extends FNContainer {
      * @return FNContainer,FNMutable
      */
     public function mutableCopy() {
-	    return FNMutableString:: initWith($this-> value);
+	    return FNMutableString:: initWith($this-> value());
     }
     
     /**
@@ -84,14 +87,14 @@ class FNString extends FNContainer {
       * @return FNContainer
       */
     public function immutableCopy() {
-	    return FNString:: initWith($this-> value);
+	    return FNString:: initWith($this-> value());
     }
 	
 	//!Allocators
-	/**
+    /**
      * @static initWithRandom
      * @param FNNumber $length = 6
-     * @param bool $characters = FALSE
+     * @param bool|\FNFoundation\FNString $characters = FALSE
      * @return FNString
      */
     static function initWithRandomString(FNNumber $length = NULL, FNString $characters = NULL) {
@@ -112,7 +115,8 @@ class FNString extends FNContainer {
     	}
     	return static::initWith($value);
     }
-    static function initWithList($arg1, $arg2 = '') {
+    static function initWithList(/** @noinspection PhpUnusedParameterInspection */
+        $arg = '') {
     	$value = '';
     	foreach(func_get_args() as $string) {
     		$value .= static::convertValue($string);
@@ -121,15 +125,19 @@ class FNString extends FNContainer {
     }
 
 	//!Implementation
-	/**
+    /**
      * @method valueWithEncoding
-     * @param int $encoding
+     * @param int|string $encoding
      * @return string
      */
     function valueWithEncoding($encoding = FNString::UTF_8) {
     	if(function_exists('mb_convert_encoding'))
     		return mb_convert_encoding($this->value(),$encoding);
-    	else return $this->value;
+    	else return $this->value();
+    }
+
+    function encoding() {
+        return mb_detect_encoding($this->value());
     }
     
     ##Substrings
@@ -141,36 +149,31 @@ class FNString extends FNContainer {
      */
     public function substring(FNNumber $start, FNNumber $length = NULL) {
     	if($length !== NULL) $length = $length->value();
-    	if(function_exists('mb_substr')) {
-    		return $this->returnObjectWith(mb_substr($this->value(),$start->value(), $length, FNString::STANDARD_ENCODING));
-    	} else return $this->returnObjectWith(substr($this->value(), $start->value(),$length));
+    	return $this->returnObjectWith(mb_substr($this->value(),$start->value(), $length->value(), FNString::STANDARD_ENCODING));
     }
-    
+
     /**
      * @method trimWidth
      * @param FNNumber $start
      * @param FNNumber $width
-     * @param FNString $trimmarker
+     * @param FNString $trimMarker
+     * @internal param \FNFoundation\FNString $trimMarker
      * @return FNString - else false
      * @link http://de2.php.net/manual/en/function.mb_strimwdith.php
      */
-    public function trimWidth(FNNumber $start,FNNumber $width,FNString $trimmarker = NULL) {
-    	if(function_exists('mb_strimwidth'))
-    		return $this->returnObjectWith(mb_strimwidth($this->value, $start->value, $width->value,$trimmarker,FNString::STANDARD_ENCODING));
-    	else return false;
-    }	
+    public function trimWidth(FNNumber $start,FNNumber $width,FNString $trimMarker = NULL) {
+    	return $this->returnObjectWith(mb_strimwidth($this->value(), $start->value(), $width->value(),$trimMarker->value(),FNString::STANDARD_ENCODING));
+    }
     /**
      * @method substringToInsensitve
-     * @param unknown_type $needle
-     * @param unknown_type $first
+     * @param FNString $needle
+     * @param mixed $first
      * @return FNString
      * @link http://de2.php.net/manual/en/function.mb_stristr.php
      * @link http://de2.php.net/manual/en/function.stristr.php
      */
     function substringToInsensitive(FNString $needle,$first = TRUE) {
-    	if(function_exists('mb_stristr'))
-    		return $this->returnObjectWith(mb_stristr($this->value, $needle->value,$first,FNString::STANDARD_ENCODING));
-    	else return $this->returnObjectWith(stristr($this->value, $needle->value,$first));
+    	return $this->returnObjectWith(mb_stristr($this->value(), $needle->value(),$first,FNString::STANDARD_ENCODING));
     }
     /**
      * @method substringTo
@@ -181,9 +184,7 @@ class FNString extends FNContainer {
      * @link http://de2.php.net/manual/en/function.strstr.php
      */
     function substringTo(FNString $needle,$first = TRUE) {
-    	if(function_exists('mb_strstr'))
-    		return $this->returnObjectWith(mb_strstr($this->value, $needle->value,$first,FNString::STANDARD_ENCODING));
-    	else return $this->returnObjectWith(strstr($this->value, $needle->value,$first));
+    	return $this->returnObjectWith(mb_strstr($this->value(), $needle->value(),$first,FNString::STANDARD_ENCODING));
     }
     /**
      * @method charWithIndex
@@ -192,25 +193,25 @@ class FNString extends FNContainer {
      * @link http://de2.php.net/manual/en/function.chr.php
      */
     function charWithIndex(FNNumber $num) {
-    	return $this->returnObjectWith(chr($this->value,$num->value));
+    	return $this->returnObjectWith(chr($this->value(),$num->value()));
     }
     /**
      * @method trimLeft
-     * @param FNString $charlist
+     * @param FNString $charList
      * @return FNString
      */
-    function trimLeft(FNString $charlist = NULL) {
-    	if($charlist) $charlist = $charlist->value();
-    	return $this->returnObjectWith(ltrim($this->value(),$charlist));
+    function trimLeft(FNString $charList = NULL) {
+    	if($charList) $charList = $charList->value();
+    	return $this->returnObjectWith(ltrim($this->value(),$charList));
     }
     /**
      * @method trimRight
-     * @param FNString $charlist
+     * @param FNString $charList
      * @return FNString
      */
-    function trimRight(FNString $charlist) {
-    	if($charlist) $charlist = $charlist->value();
-    	return $this->returnObjectWith(rtrim($this->value,$charlist));
+    function trimRight(FNString $charList) {
+    	if($charList) $charList = $charList->value();
+    	return $this->returnObjectWith(rtrim($this->value(),$charList));
     }
     /**
      * @method substringSinceOccurence
@@ -219,18 +220,15 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function substringSinceOccurence(FNString $needle,$before = FALSE) {
-    	if(function_exists('mb_stristr')) {
-    		return $this->returnObjectWith(mb_stristr($this->value(), $needle->value(),$before,FNString::STANDARD_ENCODING));
-    	}
-    	else return $this->returnObjectWith(stristr($this->value,$needle->value,$before));
+    	return $this->returnObjectWith(mb_stristr($this->value(), $needle->value(),$before,FNString::STANDARD_ENCODING));
     }
     /**
      * @method substringSinceChars
-     * @param FNString $charlist
+     * @param FNString $charList
      * @return FNString
      */
-    function substringSinceChars(FNString $charlist) {
-    	return $this->returnObjectWith(strpbrk($this->value,$charlist->value));
+    function substringSinceChars(FNString $charList) {
+    	return $this->returnObjectWith(strpbrk($this->value(),$charList->value()));
     }
     /**
      * @method substringSinceLastChar
@@ -238,7 +236,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function substringSinceLastChar(FNString $char) {
-    	return $this->returnObjectWith(strrchr($this->value,$char->value));
+    	return $this->returnObjectWith(strrchr($this->value(),$char->value()));
     }
     /**
      * @method appendString
@@ -262,7 +260,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function bin2hex() {
-    	return $this->returnObjectWith(bin2hex($this->value));
+    	return $this->returnObjectWith(bin2hex($this->value()));
     }
     /**
      * @method splitRegular
@@ -272,21 +270,18 @@ class FNString extends FNContainer {
      */
     public function splitRegular(FNString $pattern,FNNumber $limit = NULL) {
     	if($limit === NULL) $limit = FNNumber::initWith(-1);
-    
-    	if(function_exists('mb_split'))
-    		return FNArray::initWith(mb_split($pattern->value, $this->value,$limit->value));
-    	else return FNArray::initWith(split($pattern->value, $this->value,$limit->value));
+        return FNArray::initWith(mb_split($pattern->value(), $this->value(),$limit->value()));
     }
     /**
      * @method explode
-     * @param FNString $seperator
+     * @param FNString $separator
      * @param FNNumber $limit
      * @return FNArray
      */
-    function explode(FNString $seperator, FNNumber $limit = null) {
+    function explode(FNString $separator, FNNumber $limit = null) {
     	$array = null;
-    	if($limit === NULL) $array = explode($seperator->value,$this->value);
-    	else $array = explode($seperator->value,$this->value,$limit->value);
+    	if($limit === NULL) $array = explode($separator->value(),$this->value());
+    	else $array = explode($separator->value(), $this->value(),$limit->value());
     	foreach($array as $key => $value) {
     		$array[$key] = FNString::initWith($value);
     	}
@@ -299,28 +294,28 @@ class FNString extends FNContainer {
      */
     function parse(FNArray &$data) {
     	$arr = NULL;
-    	parse_str($this->value,$arr);
+    	parse_str($this->value(),$arr);
     	$data = FNArray::initWith($arr);
     } //@MODIFIED - $arr instead of &$arr(Deprecated)
     /**
      * @method csvArray
-     * @param FNString $seperator
+     * @param FNString $separator
      * @param FNString $enclosure
      * @param FNString $escape
      * @return FNArray
      */
-    function csvArray(FNString $seperator = NULL,FNString $enclosure = NULL, FNString $escape = NULL) {
-    	if($seperator === NULL) $seperator = FNString::initWith(',');
+    function csvArray(FNString $separator = NULL,FNString $enclosure = NULL, FNString $escape = NULL) {
+    	if($separator === NULL) $separator = FNString::initWith(',');
     	if($enclosure === NULL) $enclosure = FNString::initWith('"');
     	if($escape === NULL) $escape = FNString::initWith('\\');
-    	return FNArray::initWith(str_getcsv($this->value,$seperator->value,$enclosure,$escape));
+    	return FNArray::initWith(str_getcsv($this->value(),$separator->value(),$enclosure->value(),$escape->value()));
     }
     /**
      * @method split
      * @return FNArray
      */
     function split() {
-    	return FNArray::initWith(str_split($this->value));
+    	return FNArray::initWith(str_split($this->value()));
     }
 ##Encoding-Conversions
     
@@ -331,7 +326,7 @@ class FNString extends FNContainer {
      * @revision 4518745504
      */
     function urlEncode( ) {
-    	return $this-> returnObjectWith(urlencode($this->value));
+    	return $this-> returnObjectWith(urlencode($this->value()));
     }
     
     /**
@@ -341,7 +336,7 @@ class FNString extends FNContainer {
      * @revision 4525668800
      */
     function urlDecode( ) {
-    	return $this-> returnObjectWith(urldecode($this->value));
+    	return $this-> returnObjectWith(urldecode($this->value()));
     }
     
     /**
@@ -351,10 +346,8 @@ class FNString extends FNContainer {
      * @link http://cn.php.net/manual/en/function.mb-convert-kana.php
      */
     public function convertKana(FNString $option = NULL) {
-    	if($option) $option = $option->value;
-    	if(function_exists('mb_convert_kana'))
-    		return $this->returnObjectWith(mb_convert_kana($this->value,$option->value,FNString::STANDARD_ENCODING));
-    	else false;
+    	if($option) $option = $option->value();
+    	return $this->returnObjectWith(mb_convert_kana($this->value(),$option->value(),FNString::STANDARD_ENCODING));
     }
     /**
      * @method convertCyrillic
@@ -363,7 +356,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function convertCyrillic(FNString $to) {
-    	return $this->returnObjectWith(convert_cyr_string($this->value,$this->encoding,$to));
+    	return $this->returnObjectWith(convert_cyr_string($this->value(),$this->encoding(),$to->value()));
     }
     /**
      * @method convertUudecode
@@ -371,7 +364,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function convertUudecode() {
-    	return $this->returnObjectWith(convert_uudecode($this->value));
+    	return $this->returnObjectWith(convert_uudecode($this->value()));
     }
     /**
      * @method convertUuencode
@@ -379,7 +372,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function convertUuencode() {
-    	return $this->returnObjectWith(convert_uuencode($this->value));
+    	return $this->returnObjectWith(convert_uuencode($this->value()));
     }
     
 ##Case-Conversions
@@ -393,11 +386,7 @@ class FNString extends FNContainer {
      * @link http://cn.php.net/manual/en/function.ucwords.php
      */
     public function convertCase($mode) {
-    	if(function_exists('mb_convert_case'))
-    		return $this->returnObjectWith(mb_convert_case($this->value, $mode->value,FNString::STANDARD_ENCODING));
-    	elseif($mode == FNString::CASE_UPPER) return $this->returnObjectWith(strtoupper($this->value));
-    	elseif($mode == FNString::CASE_LOWER) return $this->returnObjectWith(strtolower($this->value));
-    	elseif($mode == FNString::CASE_TITLE) return $this->returnObjectWith(ucwords($this->value));
+    	return $this->returnObjectWith(mb_convert_case($this->value(), cint($mode),FNString::STANDARD_ENCODING));
     }
     /**
      * @method lowerCase
@@ -405,8 +394,8 @@ class FNString extends FNContainer {
      */
     function lowerCase() {
     	if(function_exists('mb_strtolower'))
-    		return $this->returnObjectWith(mb_strtolower($this->value,FNString::STANDARD_ENCODING));
-    	else return $this->returnObjectWith(strtolower($this->value));
+    		return $this->returnObjectWith(mb_strtolower($this->value(),FNString::STANDARD_ENCODING));
+    	else return $this->returnObjectWith(strtolower($this->value()));
     }
     /**
      * @method upperCase
@@ -414,15 +403,15 @@ class FNString extends FNContainer {
      */
     function upperCase() {
     	if(function_exists('mb_strtoupper'))
-    		return $this->returnObjectWith(mb_strtoupper($this->value,FNString::STANDARD_ENCODING));
-    	else return $this->returnObjectWith(strtoupper($this->value));
+    		return $this->returnObjectWith(mb_strtoupper($this->value(),FNString::STANDARD_ENCODING));
+    	else return $this->returnObjectWith(strtoupper($this->value()));
     }
     /**
      * @method firstCharacterToLowerCase
      * @return FNString
      */
     function firstCharacterToLowerCase() {
-    	return $this->returnObjectWith(lcfirst($this->value,$data->value));
+    	return $this->returnObjectWith(lcfirst($this->value()));
     }
     
     /**
@@ -430,7 +419,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function firstCharacterToUpperCase() {
-    	return $this->returnObjectWith(ucfirst($this->value,$data->value));
+    	return $this->returnObjectWith(ucfirst($this->value()));
     }
     
 ##RegExp	
@@ -442,7 +431,7 @@ class FNString extends FNContainer {
      */
     public function eregMatch(FNString $pattern,FNString $option = NULL) {
     	if($option === NULL) $option = FNString::initWith('msr');
-    	return $this->returnObjectWith(mb_ereg_match($pattern->value,$option->value));
+    	return $this->returnObjectWith(mb_ereg_match($pattern->value(),$option->value()));
     }
     /**
      * @method eregReplace
@@ -451,7 +440,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     public function eregReplace(FNString $pattern,FNString $replacement) {
-    	return $this->returnObjectWith(mb_ereg_replace($pattern->value, $replacement->value, $this->value));
+    	return $this->returnObjectWith(mb_ereg_replace($pattern->value(), $replacement->value(), $this->value()));
     }
     /**
      * @method ereg
@@ -459,18 +448,20 @@ class FNString extends FNContainer {
      * @return FNString
      */
     public function ereg(FNString $pattern) {
-    	return $this->returnObjectWith(mb_ereg($pattern->value, $this->value));
+    	return $this->returnObjectWith(mb_ereg($pattern->value(), $this->value()));
     }
+
     /**
      * @method eregIntensiveReplace
      * @param FNString $pattern
-     * @param FNString $replacement
+     * @param FNString $replace
      * @param FNString $option
+     * @internal param \FNFoundation\FNString $replacement
      * @return FNString
      */
-    public function eregInsensitiveReplace(FNString $pattern,FNString $replacement,FNString $option = NULL) {
+    public function eregInsensitiveReplace(FNString $pattern,FNString $replace,FNString $option = NULL) {
     	if($option === NULL)  $option = FNString::initWith('msri');
-    	return $this->returnObjectWith(mb_eregi_replace($pattern->value, $replace->value, $this->value,$option->value));
+    	return $this->returnObjectWith(mb_eregi_replace($pattern->value(), $replace->value(), $this->value(),$option->value()));
     }
     /**
      * @method eregIntensive
@@ -478,26 +469,19 @@ class FNString extends FNContainer {
      * @return FNString
      */
     public function eregInsensitive(FNString $pattern) {
-    	return $this->returnObjectWith(mb_eregi($pattern->value, $this->value));
+    	return $this->returnObjectWith(mb_eregi($pattern->value(), $this->value()));
     }
 
 ##Security
-    /**
-     * @method crc32
-     * @param FNString $data
-     * @return FNNumber
-     */
-    function crc32() {
-    	return FNNumber::initWith(crc32($this->value));
-    }
     /**
      * @method crypt
      * @param FNString $salt
      * @return FNString
      */
     function crypt(FNString $salt = null) {
+        FNTodo("Reimplement crypt");
     	if($salt) $salt = $salt->value();
-    	return $this->returnObjectWith(convert_uudecode($this->value,$salt));
+    	return $this->returnObjectWith(convert_uudecode($this->value(),$salt));
     }
     /**
      * @method levenshtein
@@ -505,15 +489,7 @@ class FNString extends FNContainer {
      * @return FNNumber
      */
     function levenshtein(FNString $data) {
-    	return FNNumber::initWith(levenshtein($this->value,$data->value));
-    }
-    /**
-     * @method md5
-     * @param boolean $data
-     * @return FNString
-     */
-    function md5( $raw = false) {
-    	return $this->returnObjectWith(md5($this->value,$raw));
+    	return FNNumber::initWith(levenshtein($this->value(),$data->value()));
     }
     /**
      * @method ord
@@ -527,16 +503,7 @@ class FNString extends FNContainer {
     		$number.= ord($char{$i});
     		++$i;
     	}
-    	return $number;
     	return FNNumber::initWith($number);
-    }
-    /**
-     * @method sha1Hash
-     * @param boolean $data
-     * @return FNString
-     */
-    function sha1Hash($data = false) {
-    	return $this->returnObjectWith(sha1($this->value,$data));
     }
     /**
      * @method similarity
@@ -544,32 +511,25 @@ class FNString extends FNContainer {
      * @return FNNumber
      */
     function similarity(FNString $data) {
-    	return FNNumber::initWith(similar_text($this->value,$data->value));
-    }
-    /**
-     * @method rot13
-     * @return FNString
-     */
-    function rot13() {
-    	return $this->returnObjectWith(str_rot13($this->value));
+    	return FNNumber::initWith(similar_text($this->value(),$data->value()));
     }
     
 ##manipulation
     /**
      * @method addSlashes
-     * @param FNString $charlist
+     * @param FNString $charList
      * @return FNString
      */
-    function addSlashes(FNString $charlist) {
-    	return $this->returnObjectWith(addSlashes($this->value,$charlist->value));
+    function addSlashes(FNString $charList) {
+    	return $this->returnObjectWith(addSlashes($this->value(),$charList->value()));
     }
     /**
      * @method addCSlashes
-     * @param FNString $charlist
+     * @param FNString $charList
      * @return FNString
      */
-    function addCSlashes(FNString $charlist) {
-    	return $this->returnObjectWith(addCSlashes($this->value,$charlist->value));
+    function addCSlashes(FNString $charList) {
+    	return $this->returnObjectWith(addCSlashes($this->value(),$charList->value()));
     }
     /**
      * @method reverseHebrew
@@ -577,7 +537,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function reverseHebrew(FNNumber $maxChars) {
-    	return $this->returnObjectWith(hebrev($this->value,$maxChars->value));
+    	return $this->returnObjectWith(hebrev($this->value(),$maxChars->value()));
     }
     /**
      * @method reverseHebrewBr
@@ -585,7 +545,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function reverseHebrewBr(FNNumber $maxChars) {
-    	return $this->returnObjectWith(hebrevc($this->value,$maxChars->value));
+    	return $this->returnObjectWith(hebrevc($this->value(),$maxChars->value()));
     }
     /**
      * @method decodeHTMLEntities
@@ -593,8 +553,8 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function decodeHTMLEntities(FNNumber $flags = NULL) {
-    	if($flags) $flags = $flags->value();
-    	return $this->returnObjectWith(html_entity_decode($this->value,$flags,FNString::STANDARD_ENCODING));
+    	if(!$flags) $flags = n(0);
+    	return $this->returnObjectWith(html_entity_decode($this->value(),$flags->value(),FNString::STANDARD_ENCODING));
     }
     /**
      * @method encodeHTMLEntities
@@ -603,8 +563,8 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function encodeHTMLEntities(FNString $data = NULL, $doubleEncode = TRUE) {
-    	if($data === NULL) $data = FNString::initWith(ENT_COMPFN | ENT_HTML401);
-    	return $this->returnObjectWith(htmlentities($this->value,$data->value,FNString::STANDARD_ENCODING,$doubleEncode));
+    	if($data === NULL) $data = FNString::initWith(ENT_COMPAT | ENT_HTML401);
+    	return $this->returnObjectWith(htmlentities($this->value(),$data->value(),FNString::STANDARD_ENCODING,$doubleEncode));
     }
     /**
      * @method decodeSpecialHTMLChars
@@ -612,8 +572,8 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function decodeSpecialHTMLChars(FNNumber $flags = NULL) {
-    	if($flags === NULL) $flags = FNNumber::initWith(ENT_COMPFN);
-    	return $this->returnObjectWith(htmlspecialchars_decode($this->value,$flags->value));
+    	if($flags === NULL) $flags = FNNumber::initWith(ENT_COMPAT);
+    	return $this->returnObjectWith(htmlspecialchars_decode($this->value(),$flags->value()));
     }
     /**
      * @method encodeSpecialHTMLChars
@@ -622,30 +582,32 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function encodeSpecialHTMLChars(FNNumber $flags = NULL,$doubleEncode = true) {
-    	if($flags === NULL) $flags = FNNumber::initWith(ENT_COMPFN | ENT_HTML401);
-    	return $this->returnObjectWith(convert_uudecode($this->value,$flags->value,FNString::STANDARD_ENCODING,$doubleEncode));
+    	if($flags === NULL) $flags = FNNumber::initWith(ENT_COMPAT | ENT_HTML401);
+    	return $this->returnObjectWith(convert_uudecode($this->value(),$flags->value(),FNString::STANDARD_ENCODING,$doubleEncode));
     }
+
     /**
      * @method newLine2Br
-     * @param boolean $data
+     * @param bool $xhtml
+     * @internal param bool $data
      * @return FNString
      */
     function newLine2Br( $xhtml = TRUE) {
-    	return $this->returnObjectWith(nl2br($this->value,$xhtml));
+    	return $this->returnObjectWith(nl2br($this->value(),$xhtml));
     }
     /**
      * @method quoteMetaChars
      * @return FNString
      */
     function quoteMetaChars() {
-    	return $this->returnObjectWith(quotemeta($this->value));
+    	return $this->returnObjectWith(quotemeta($this->value()));
     }
     /**
      * @method shuffle
      * @return FNString
      */
     function shuffle() {
-    	return $this->returnObjectWith(str_shuffle($this->value));
+    	return $this->returnObjectWith(str_shuffle($this->value()));
     }
     /**
      * @method stripTags
@@ -654,28 +616,28 @@ class FNString extends FNContainer {
      */
     function stripTags(FNString $allowedTags = NULL) {
     	if($allowedTags) $allowedTags = $allowedTags->value();
-    	return $this->returnObjectWith(strip_tags($this->value,$allowedTags));
+    	return $this->returnObjectWith(strip_tags($this->value(),$allowedTags));
     }
     /**
      * @method stripCSlashes
      * @return FNString
      */
     function stripCSlashes() {
-    	return $this->returnObjectWith(stripcslashes($this->value));
+    	return $this->returnObjectWith(stripcslashes($this->value()));
     }
     /**
      * @method stripSlashes
      * @return FNString
      */
     function stripSlashes() {
-    	return $this->returnObjectWith(stripslashes($this->value));
+    	return $this->returnObjectWith(stripslashes($this->value()));
     }
     /**
      * @method reverse
      * @return FNString
      */
     function reverse() {
-    	return $this->returnObjectWith(strrev($this->value));
+    	return $this->returnObjectWith(strrev($this->value()));
     }
     /**
      * @method replaceSubstrings
@@ -684,16 +646,16 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function replaceSubstrings(FNString $search, FNString $to) {
-    	return $this->returnObjectWith(strtr($this->value,$search->value,$to->value));
+    	return $this->returnObjectWith(strtr($this->value(),$search->value(),$to->value()));
     }
     /**
      * @method trim
-     * @param FNString $charlist
+     * @param FNString $charList
      * @return FNString
      */
-    function trim(FNString $charlist = null) {
-    	if($charlist) $charlist = $charlist->value();
-    	return $this->returnObjectWith(trim($this->value,$charlist));
+    function trim(FNString $charList = null) {
+    	if($charList) $charList = $charList->value();
+    	return $this->returnObjectWith(trim($this->value(),$charList));
     }
     /**
      * @method wrapWords
@@ -706,7 +668,7 @@ class FNString extends FNContainer {
     function wrapWords(FNNumber $data,FNNumber $width = NULL,FNString $break = NULL,$cut = false) {
     	if($width === NULL) $width = FNNumber::initWith(75);
     	if($break === NULL) $break = FNString::initWith('\n');
-    	return $this->returnObjectWith(wordwrap($this->value,$data->value,$width->value,$break->value,$cut));
+    	return $this->returnObjectWith(wordwrap($this->value(),$data->value(),$width->value(),$break->value(),$cut));
     }
     /**
      * @method replaceSubstring
@@ -717,18 +679,19 @@ class FNString extends FNContainer {
      */
     function replaceSubstring(FNString $replace, FNNumber $start, FNNumber $length = null) {
     	if($length) $length = $length->value();
-    	return $this->returnObjectWith(substr_replace($this->value(),$replace->value(),$start->value(),$length));
+    	return $this->returnObjectWith(substr_replace($this->value(),$replace->value(),$start->value(),$length->value()));
     }
     /**
-     * @method intensiveRelace
+     * @method insensitiveReplace
      * @param FNString $data
      * @param FNString $replace
      * @param FNNumber $count
      * @return FNString
      */
-    function insisitiveReplace(FNString $data,FNString $replace, &$count = null) {
-    	$return = $this->returnObjectWith(str_ireplace($data->value,$replace->value,$this->value,$count)); //@MODIFIED $count instead of &$count(Deprecated)
-    	$count = FNNumber::initWith($count);
+    function insensitiveReplace(FNString $data,FNString $replace, &$count = null) {
+        $temp = NULL;
+    	$return = $this->returnObjectWith(str_ireplace($data->value(),$replace->value(),$this->value(),$temp));
+    	$count = FNNumber::initWith($temp);
     	return $return;
     }
     /**
@@ -736,11 +699,12 @@ class FNString extends FNContainer {
      * @param FNNumber $data
      * @param FNString $pad
      * @param FNNumber $padType
+     * @return \FNFoundation\FNContainer
      */
     function pad(FNNumber $data, FNString $pad = NULL, FNNumber $padType = NULL) {
     	if($pad === NULL) $pad = FNString::initWith(' ');
     	if($padType === NULL) $padType = FNNumber::initWith(STR_PAD_RIGHT);
-    	return $this->returnObjectWith(str_pad($this->value,$data->value, $pad->value,$padType->value));
+    	return $this->returnObjectWith(str_pad($this->value(),$data->value(), $pad->value(),$padType->value()));
     }
     /**
      * @method repeat
@@ -748,7 +712,7 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function repeat(FNNumber $times) {
-    	return $this->returnObjectWith(str_repeat($this->value,$times->value));
+    	return $this->returnObjectWith(str_repeat($this->value(),$times->value()));
     }
     /**
      * @method replace
@@ -758,21 +722,24 @@ class FNString extends FNContainer {
      * @return FNString
      */
     function replace(FNString $search,FNString $replace, &$count = null) {
-    	$return = $this->returnObjectWith(str_replace($search->value(),$replace->value(),$this->value(),$count));//@MODIFIED $count instead of &$count(Deprecated)
-    	$count = FNNumber::initWith($count);
+        $temp = NULL;
+    	$return = $this->returnObjectWith(str_replace($search->value(),$replace->value(),$this->value(),$temp));//@MODIFIED $count instead of &$count(Deprecated)
+    	$count = FNNumber::initWith($temp);
     	return $return;
     }
 ##count/position
     /**
      * @method countWords
-     * @param FNNumber $data
-     * @param FNString $charlist
+     * @param FNNumber $option
+     * @param FNString $charList
+     * @internal param \FNFoundation\FNNumber $data
+     * @internal param \FNFoundation\FNString $charList
      * @return FNString
      */
-    function countWords(FNNumber $option = NULL,FNString $charlist = NULL) {
+    function countWords(FNNumber $option = NULL,FNString $charList = NULL) {
     	if(!$option) $option = FNNumber::zero(); 
-    	if($charlist === NULL) $charlist = FNString::initWith('');
-    	return $this->returnObjectWith(str_word_count($this->value,$data->value,$charlist->value));
+    	if($charList === NULL) $charList = FNString::initWith('');
+    	return $this->returnObjectWith(str_word_count($this->value(),$option->value(),$charList->value()));
     }
     /**
      * @method positionOfMissingChar
@@ -783,7 +750,7 @@ class FNString extends FNContainer {
      */                              
     function positionOfMissingChar(FNString $char, FNNumber $start = NULL,FNNumber $length = null) {
     	if($start === NULL) $start = FNNumber::initWith(0);
-    	return $this->returnObjectWith(strcspn($this->value,$char->value,$start->value,$length->value));
+    	return $this->returnObjectWith(strcspn($this->value(),$char->value(),$start->value(),$length->value()));
     }
     /**
      * @method positionOf
@@ -801,7 +768,7 @@ class FNString extends FNContainer {
      */
     function insensitivePositionOf(FNString $data,FNNumber $offset = NULL) {
     	if($offset === NULL) $offset = FNNumber::initWith(0);
-    	return FNNumber::initWith(stripos($this->value,$data->value,$offset->value));
+    	return FNNumber::initWith(stripos($this->value(),$data->value(),$offset->value()));
     }
     /**
      * @method positionOfLastInsesitiveOccurence
@@ -811,17 +778,17 @@ class FNString extends FNContainer {
      */
     function positionOfLastInsensitiveOccurence(FNString $data, FNNumber $offset = NULL) {
     	if($offset === NULL) $offset = FNNumber::initWith(0);
-    	return $this->returnObjectWith(strripos($this->value,$data->value,$offset->value));
+    	return $this->returnObjectWith(strripos($this->value(),$data->value(),$offset->value()));
     }
     /**
-     * @method positionOfLastOccurence
+     * @method positionOfLastOccurrence
      * @param FNString $data
      * @param FNNumber $offset
      * @return FNNumber
      */
-    function positionOfLastOccurence(FNString $data, FNNumber $offset = NULL) {
+    function positionOfLastOccurrence(FNString $data, FNNumber $offset = NULL) {
     	if($offset === NULL) $offset = FNNumber::initWith(0);
-    	return $this->returnObjectWith(strrpos($this->value,$data->value,$offset->value));
+    	return $this->returnObjectWith(strrpos($this->value(),$data->value(),$offset->value()));
     }
     /**
      * @method lengthOfChars
@@ -830,9 +797,9 @@ class FNString extends FNContainer {
      * @param FNNumber $length
      * @return FNNumber
      */
-    function lengthOfSubstringOfChars(FNString $data, FNNumber $start = NULL, FNNumber $length = null) {
+    function lengthOfSubstringOfChars(FNString $data, FNNumber $start = NULL, FNNumber $length = NULL) {
     	if($start === NULL) $start = FNNumber::initWith(0);
-    	return $this->returnObjectWith(strspn($this->value,$data->value,$start->value,$length->value));
+    	return $this->returnObjectWith(strspn($this->value(),$data->value(),$start->value(),$length->value()));
     }
     /**
      * @method countSubstring
@@ -840,9 +807,7 @@ class FNString extends FNContainer {
      * @return FNNumber
      */
     function countSubstring(FNString $needle) {
-    	if(function_exists('mb_substr_count'))
-    		return FNNumber::initWith(mb_substr_count($this->value, $needle->value));
-    	else return FNNumber::initWith(substr_count($this->value, $needle->value));
+    	return FNNumber::initWith(mb_substr_count($this->value(), $needle->value()));
     }
     /**
      * @method positionOfLastInsensitive
@@ -852,10 +817,7 @@ class FNString extends FNContainer {
      */
     function positionOfLastInsensitive(FNString $data, FNNumber $offset = NULL) {
     	if($offset === NULL) $offset = FNNumber::initWith(0);
-    
-    	if(function_exists('mb_stripos'))
-    		return $this->returnObjectWith(mb_stripos($this->value,$data->value,$offset->value,FNString::STANDARD_ENCODING));
-    	else return $this->returnObjectWith(stripos($this->value,$data->value,$offset->value));
+        return $this->returnObjectWith(mb_stripos($this->value(),$data->value(),$offset->value(),FNString::STANDARD_ENCODING));
     }
 ##Others
     /**
@@ -863,9 +825,7 @@ class FNString extends FNContainer {
      * @return FNNumber
      */
     function stringWidth() {
-    	if(function_exists('mb_strwidth'))
-    		return FNNumber::initWith(mb_strwidth($this->value,FNString::STANDARD_ENCODING));
-    	else return FNNumber::zero();
+    	return FNNumber::initWith(mb_strwidth($this->value(),FNString::STANDARD_ENCODING));
     }
     /**
      * @method metaphone
@@ -874,24 +834,26 @@ class FNString extends FNContainer {
      */
     function metaphone(FNNumber $data = NULL) {
     	if($data === NULL) $data = FNNumber::initWith(0);
-    	return $this->returnObjectWith(metaphone($this->value,$data->value));
+    	return $this->returnObjectWith(metaphone($this->value(),$data->value()));
     }
     /**
      * @method soundex
      * @return FNString
      */
     function soundex() {
-    	return $this->returnObjectWith(soundex($this->value));
+    	return $this->returnObjectWith(soundex($this->value()));
     }
     
     
     
-    function format(FNContainer $container = NULL /*infinite arguments*/) {
+    function format(/** @noinspection PhpUnusedParameterInspection */
+        FNContainer $container = NULL /*infinite arguments*/) {
     	$array = array($this->value());
     	
     	foreach(func_get_args() as $arg) {
     		if(function_exists(array($arg,'value')))
-    			$array[] = $arg->value();
+                /** @noinspection PhpUndefinedMethodInspection */
+                $array[] = $arg->value();
     		else $array[] = FNString::initWith('');
     	}
     				
@@ -903,7 +865,8 @@ class FNString extends FNContainer {
     		
     	foreach($containers as $arg) {
     		if(function_exists(array($arg,'value')))
-    			$array[] = $arg->value();
+                /** @noinspection PhpUndefinedMethodInspection */
+                $array[] = $arg->value();
     		else $array[] = FNString::initWith('');
     	}
     	
