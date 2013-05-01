@@ -21,6 +21,5 @@ define('FLOAT', gettype(0.0));
 define('RESOURCE', 'resource');
 define('OBJECT', 'object');
 
-define('DEBUG', TRUE);
-
-?>
+define('DEBUG', in_array('--debug', $argv) || in_array('--debug=1', $argv));
+define('HTML_DISABLED', in_array('--html=0', $argv));

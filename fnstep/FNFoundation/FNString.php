@@ -178,7 +178,7 @@ class FNString extends FNContainer
 
     public static function initWith($value, $encoding = FNString::STANDARD_ENCODING)
     {
-        return parent::initWith(mb_convert_encoding($value, $encoding));
+        return parent::initWith(mb_convert_encoding(cstring($value), $encoding));
     }
 
 
@@ -1083,5 +1083,3 @@ class FNMutableString extends FNString implements FNMutableContainer
     use FNDefaultMutableContainer;
 }
 
-?>
-			

@@ -354,4 +354,4 @@ class FNCommonIdentifier extends FNIdentifier
     }
 }
 
-?>
+

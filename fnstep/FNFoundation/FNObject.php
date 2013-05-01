@@ -510,5 +510,3 @@ class FNObject implements Object, FNComparable
     use FNDefaultComparable;
 }
 
-?>
-						

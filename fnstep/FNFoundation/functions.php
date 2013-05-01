@@ -10,7 +10,6 @@
 use FNFoundation\FNArgumentException;
 use FNFoundation\FNArray;
 use FNFoundation\FNContainer;
-use FNFoundation\FNContainer;
 use FNFoundation\FNDictionary;
 use FNFoundation\FNIdentifiable;
 use FNFoundation\FNMutableArray;
@@ -22,20 +21,6 @@ use FNFoundation\FNSet;
 use FNFoundation\FNString;
 use FNFoundation\FNTodoException;
 use FNFoundation\FNVersionException;
-use FNFoundation\Object;
-use FNFoundation\FNIdentifiable;
-use FNFoundation\FNString;
-use FNFoundation\FNArray;
-use FNFoundation\FNTodoException;
-use FNFoundation\FNNumber;
-use FNFoundation\FNSet;
-use FNFoundation\FNMutableSet;
-use FNFoundation\FNMutableString;
-use FNFoundation\FNDictionary;
-use FNFoundation\FNMutableDictionary;
-use FNFoundation\FNVersionException;
-use FNFoundation\FNMutableArray;
-use FNFoundation\FNArgumentException;
 use FNFoundation\Object;
 
 //!––––––––––––––––––––––––––––––––
@@ -52,6 +37,10 @@ define('OBJECT_TYPE', 'object');
 
 //!––––––––––––––––––––––––––––––––
 //!functions
+
+function FNLog($message = '') {
+    if(DEBUG) echo '['.date("Y-m-d H:i:s").' '.basename($_SERVER["SCRIPT_FILENAME"], '.php').'] '.$message.PHP_EOL.(HTML_DISABLED ? '' : '<br/>');
+}
 
 /**
  * Throws an exception to signalize what's up next.

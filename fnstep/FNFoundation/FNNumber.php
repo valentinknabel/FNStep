@@ -670,6 +670,3 @@ class FNMutableNumber extends FNNumber implements FNMutableContainer
 {
     use FNDefaultMutableContainer;
 }
-
-?>
-						

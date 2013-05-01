@@ -96,5 +96,3 @@ class FNNil extends FNContainer
 
 }
 
-?>
-						

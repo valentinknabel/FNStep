@@ -86,5 +86,5 @@ class FNMutableBoolean extends FNBoolean implements FNMutableContainer
     use FNDefaultMutableContainer;
 }
 
-?>
+
 						

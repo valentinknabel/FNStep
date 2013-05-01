@@ -322,7 +322,3 @@ class FNMutableSet extends FNSet implements FNMutableContainer
 {
     use FNDefaultMutableContainer;
 }
-
-
-?>
-						

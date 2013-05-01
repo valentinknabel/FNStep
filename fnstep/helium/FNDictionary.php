@@ -16,14 +16,15 @@ class FNDictionary extends FNContainer implements \Iterator, FNTraversable, \Arr
     
     private $position;
     private $tempKeys;
-    
+
     /**
      * Returns an instance for FNDictionary using a list of parameters
      * @param FNString $key1
-     * @param object $value1
+     * @param \FNFoundation\object|object $value1
      * @param FNString $key2
-     * @param object $value2
-     * @param ...
+     * @param \FNFoundation\object|object $value2
+     * @return \FNFoundation\FNValidatable|NULL
+     * @internal param $ ...
      */
     static function initWithList(FNString $key1, object $value1,FNString $key2 = NULL, object $value2 = NULL /* infinite arguments */) {
     	$tempArr = array();
@@ -55,10 +56,10 @@ class FNDictionary extends FNContainer implements \Iterator, FNTraversable, \Arr
     	$this->position = 0;
     	$this->tempKeys = array_keys($this->value());
     }
-    
+
     /**
      * Returns TRUE if the FNDictionary contains the value $value
-     * @param object $value
+     * @param \FNFoundation\object|object $value
      * @return boolean
      */
     function contains(object $value) {
@@ -216,11 +217,12 @@ class FNDictionary extends FNContainer implements \Iterator, FNTraversable, \Arr
     		$offset = FNString::initWith($offset);
     	return $this->unsetValueForKey($offset);
     }
+
     /**
-     * 
+     *
      * Enter description here ...
      * @param FNString $key
-     * @param object $value
+     * @param \FNFoundation\object|object $value
      * @return FNDictionary
      */
     function setValueForKey(FNString $key,object $value) {
@@ -261,4 +263,3 @@ class FNDictionary extends FNContainer implements \Iterator, FNTraversable, \Arr
 }
 class FNMutableDictionary extends FNDictionary implements FNMutable {} //@MODIFIED
 
-?>  				

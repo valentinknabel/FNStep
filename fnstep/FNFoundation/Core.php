@@ -20,5 +20,4 @@ FNTodo('FNDictionary');
 FNTodo('FNResource');
 FNTodo('FNNil ergänzen');
 
-?>
-						
+
