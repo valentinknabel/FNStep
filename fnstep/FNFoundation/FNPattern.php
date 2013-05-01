@@ -30,7 +30,12 @@ class FNPattern extends FNObject {
     }
 
     public static function initWithString(FNString $pattern) {
-        return new static($pattern);
+        $cpattern = $pattern->value();
+        FNTodo("validate the pattern");
+        
+        /** @var $cpattern string */
+        /** @noinspection PhpParamsInspection */
+        return new static(FNString::initWith($cpattern, $pattern->encoding()));
     }
-    
+
 }

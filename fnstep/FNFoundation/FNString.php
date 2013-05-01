@@ -176,6 +176,12 @@ class FNString extends FNContainer
         return static::initWith($value);
     }
 
+    public static function initWith($value, $encoding = FNString::STANDARD_ENCODING)
+    {
+        return parent::initWith(mb_convert_encoding($value, $encoding));
+    }
+
+
     static function initWithList(/** @noinspection PhpUnusedParameterInspection */
         $arg = '')
     {
@@ -194,9 +200,7 @@ class FNString extends FNContainer
      */
     function valueWithEncoding($encoding = FNString::UTF_8)
     {
-        if (function_exists('mb_convert_encoding'))
-            return mb_convert_encoding($this->value(), $encoding);
-        else return $this->value();
+        return mb_convert_encoding($this->value(), $encoding);
     }
 
     function encoding()
