@@ -9,6 +9,7 @@
 
 use FNFoundation\FNContainer;
 
+require('const.php');
 require('FNFoundation/functions.php');
 require('FNFoundation/FNObject.php');
 require('FNFoundation/FNException.php');

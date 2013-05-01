@@ -7,7 +7,21 @@
 //!Copyright (c) 2013 Valentin Knabel. All rights reserved.
 //
 
+use FNFoundation\FNArgumentException;
+use FNFoundation\FNArray;
 use FNFoundation\FNContainer;
+use FNFoundation\FNContainer;
+use FNFoundation\FNDictionary;
+use FNFoundation\FNIdentifiable;
+use FNFoundation\FNMutableArray;
+use FNFoundation\FNMutableDictionary;
+use FNFoundation\FNMutableSet;
+use FNFoundation\FNMutableString;
+use FNFoundation\FNNumber;
+use FNFoundation\FNSet;
+use FNFoundation\FNString;
+use FNFoundation\FNTodoException;
+use FNFoundation\FNVersionException;
 use FNFoundation\Object;
 use FNFoundation\FNIdentifiable;
 use FNFoundation\FNString;
@@ -22,6 +36,7 @@ use FNFoundation\FNMutableDictionary;
 use FNFoundation\FNVersionException;
 use FNFoundation\FNMutableArray;
 use FNFoundation\FNArgumentException;
+use FNFoundation\Object;
 
 //!––––––––––––––––––––––––––––––––
 //!constants
@@ -44,8 +59,9 @@ define('OBJECT_TYPE', 'object');
  * @throws FNFoundation\FNTodoException
  * @return void
  */
-function FNTodo($message = '') {
-	throw new FNTodoException($message);
+function FNTodo($message = '')
+{
+    throw new FNTodoException($message);
 }
 
 /**
@@ -54,8 +70,9 @@ function FNTodo($message = '') {
  * @param $value
  * @return FNContainer
  */
-function con($value) {
-	return FNContainer::initWith($value);
+function con($value)
+{
+    return FNContainer::initWith($value);
 }
 
 /**
@@ -63,8 +80,9 @@ function con($value) {
  * @param $value
  * @return FNNumber
  */
-function n($value) {
-	return FNNumber::initWith(cnumber($value));
+function n($value)
+{
+    return FNNumber::initWith(cnumber($value));
 }
 
 /**
@@ -74,46 +92,47 @@ function n($value) {
  * @throws FNFoundation\FNVersionException
  * @return number
  */
-function cnumber($value) {
-	switch(gettype($value)) {
-	    case NULL_TYPE:
-	    	return 0;
-	    case BOOLEAN_TYPE:
-	    	return $value ? 1 : 0;
-	    case INTEGER_TYPE:
-	    	return $value;
-	    case FLOAT_TYPE:
-	    	return $value;
-	    case STRING_TYPE:
-	    	return is_numeric($value) ? (floatval($value) == intval($value) ? intval($value) : floatval($value)) : 0;
-	    case ARRAY_TYPE:
-	        return count($value);
-	    case RESOURCE_TYPE:
-	        return intval($value);
-	    case OBJECT_TYPE:
-	    	if($value instanceof Countable)
-	    		return count($value);
-	    	if($value instanceof Traversable) {
-		    	$count = 0;
+function cnumber($value)
+{
+    switch (gettype($value)) {
+        case NULL_TYPE:
+            return 0;
+        case BOOLEAN_TYPE:
+            return $value ? 1 : 0;
+        case INTEGER_TYPE:
+            return $value;
+        case FLOAT_TYPE:
+            return $value;
+        case STRING_TYPE:
+            return is_numeric($value) ? (floatval($value) == intval($value) ? intval($value) : floatval($value)) : 0;
+        case ARRAY_TYPE:
+            return count($value);
+        case RESOURCE_TYPE:
+            return intval($value);
+        case OBJECT_TYPE:
+            if ($value instanceof Countable)
+                return count($value);
+            if ($value instanceof Traversable) {
+                $count = 0;
                 /** @noinspection PhpUnusedLocalVariableInspection */
-                foreach($value as $needle) {
-			    	$count++;
-		    	}
-		    	return $count;
-	    	}
-	    	if($value instanceof FNNumber)
-	        	return $value-> value();
-	    	if($value instanceof FNIdentifiable)
-	        	return cnumber($value-> numericIdentifier());
-	        if($value instanceof Object)
-	        	return cnumber($value-> __toString());
-	        if(method_exists($value, '__toString'))
+                foreach ($value as $needle) {
+                    $count++;
+                }
+                return $count;
+            }
+            if ($value instanceof FNNumber)
+                return $value->value();
+            if ($value instanceof FNIdentifiable)
+                return cnumber($value->numericIdentifier());
+            if ($value instanceof Object)
+                return cnumber($value->__toString());
+            if (method_exists($value, '__toString'))
                 /** @noinspection PhpUndefinedMethodInspection */
-                return cnumber($value-> __toString());
-	        return 1;
-	    default:
-	        throw new FNVersionException('Update FNFoundation: a new PHP-type has been added');
-	}
+                return cnumber($value->__toString());
+            return 1;
+        default:
+            throw new FNVersionException('Update FNFoundation: a new PHP-type has been added');
+    }
 }
 
 /**
@@ -122,8 +141,9 @@ function cnumber($value) {
  * @param $value
  * @return int
  */
-function cint($value) {
-	return intval(cnumber($value));
+function cint($value)
+{
+    return intval(cnumber($value));
 }
 
 /**
@@ -133,8 +153,9 @@ function cint($value) {
  * @return FNString
  */
 function s(/** @noinspection PhpUnusedParameterInspection */
-    $value = '') {
-	return FNString:: initWith(func_get_args());
+    $value = '')
+{
+    return FNString:: initWith(func_get_args());
 }
 
 /**
@@ -144,8 +165,9 @@ function s(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableString
  */
 function ms(/** @noinspection PhpUnusedParameterInspection */
-    $value = '') {
-	return FNMutableString:: initWith(func_get_args());
+    $value = '')
+{
+    return FNMutableString:: initWith(func_get_args());
 }
 
 /**
@@ -156,58 +178,59 @@ function ms(/** @noinspection PhpUnusedParameterInspection */
  * @throws FNFoundation\FNVersionException
  * @return string
  */
-function cstring($value = '') {
-	if(func_num_args() == 1) {
-		switch(gettype($value)) {
-		    case NULL_TYPE:
-		    	return '';
-		    case BOOLEAN_TYPE:
-		    	return $value ? 'true' : 'false';
-		    case INTEGER_TYPE:
-		    	return strval($value);
-		    case FLOAT_TYPE:
-		    	return strval($value);
-		    case STRING_TYPE:
-		    	return $value;
-		    case ARRAY_TYPE:
-		        $string = '';
+function cstring($value = '')
+{
+    if (func_num_args() == 1) {
+        switch (gettype($value)) {
+            case NULL_TYPE:
+                return '';
+            case BOOLEAN_TYPE:
+                return $value ? 'true' : 'false';
+            case INTEGER_TYPE:
+                return strval($value);
+            case FLOAT_TYPE:
+                return strval($value);
+            case STRING_TYPE:
+                return $value;
+            case ARRAY_TYPE:
+                $string = '';
                 /** @noinspection PhpWrongForeachArgumentTypeInspection */
-                foreach($value as $needle) {
-		        	if($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
-		            $string .= cstring($needle);
-		        }
-		        return $string;
-		    case RESOURCE_TYPE:
-		        return strval($value);
-		    case OBJECT_TYPE:
-		    	if($value instanceof Traversable) {
-			    	$string = '';
-			    	foreach($value as $needle) {
-				    	if($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
-				    	$string .= cstring($needle);
-			    	}
-			    	return $string;
-		    	}
-		    	if($value instanceof FNString)
-		        	return $value-> value();
-		    	if($value instanceof FNIdentifiable)
-		        	return cnumber($value-> identifier());
-		        if($value instanceof Object)
-		        	return $value-> __toString();
-		        if(method_exists($value, '__toString'))
+                foreach ($value as $needle) {
+                    if ($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
+                    $string .= cstring($needle);
+                }
+                return $string;
+            case RESOURCE_TYPE:
+                return strval($value);
+            case OBJECT_TYPE:
+                if ($value instanceof Traversable) {
+                    $string = '';
+                    foreach ($value as $needle) {
+                        if ($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
+                        $string .= cstring($needle);
+                    }
+                    return $string;
+                }
+                if ($value instanceof FNString)
+                    return $value->value();
+                if ($value instanceof FNIdentifiable)
+                    return cnumber($value->identifier());
+                if ($value instanceof Object)
+                    return $value->__toString();
+                if (method_exists($value, '__toString'))
                     /** @noinspection PhpUndefinedMethodInspection */
-                    return $value-> __toString();
-		        return serialize($value);
-		    default:
-		        throw new FNVersionException('Update FNFoundation: a new PHP-type has been added');
-		}
-	} else {
-		$string = '';
-		foreach(func_get_args() as $arg) {
-			$string .= cstring($arg);
-		}
-		return $string;
-	}
+                    return $value->__toString();
+                return serialize($value);
+            default:
+                throw new FNVersionException('Update FNFoundation: a new PHP-type has been added');
+        }
+    } else {
+        $string = '';
+        foreach (func_get_args() as $arg) {
+            $string .= cstring($arg);
+        }
+        return $string;
+    }
 }
 
 /**
@@ -217,8 +240,9 @@ function cstring($value = '') {
  * @return FNArray
  */
 function a(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL) {
-	return FNArray::initWith(call_user_func_array('carray', func_get_args()));
+    $value = NULL)
+{
+    return FNArray::initWith(call_user_func_array('carray', func_get_args()));
 }
 
 /**
@@ -228,8 +252,9 @@ function a(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableArray
  */
 function ma(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL) {
-	return FNMutableArray::initWith(call_user_func_array('carray', func_get_args()));
+    $value = NULL)
+{
+    return FNMutableArray::initWith(call_user_func_array('carray', func_get_args()));
 }
 
 /**
@@ -239,8 +264,9 @@ function ma(/** @noinspection PhpUnusedParameterInspection */
  * @return array
  */
 function carray(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL) {
-	return carraya(func_get_args());
+    $value = NULL)
+{
+    return carraya(func_get_args());
 }
 
 /**
@@ -249,8 +275,9 @@ function carray(/** @noinspection PhpUnusedParameterInspection */
  * @param null $value
  * @return array
  */
-function carraya($value) {
-	return array_values($value);
+function carraya($value)
+{
+    return array_values($value);
 }
 
 /**
@@ -262,8 +289,9 @@ function carraya($value) {
  * @return FNDictionary
  */
 function d(/** @noinspection PhpUnusedParameterInspection */
-    $key = NULL, $value = NULL) {
-	return FNDictionary::initWith(call_user_func_array('cdict', func_get_args()));
+    $key = NULL, $value = NULL)
+{
+    return FNDictionary::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
 /**
@@ -275,8 +303,9 @@ function d(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableDictionary
  */
 function md(/** @noinspection PhpUnusedParameterInspection */
-    $key = NULL, $value = NULL) {
-	return FNMutableDictionary::initWith(call_user_func_array('cdict', func_get_args()));
+    $key = NULL, $value = NULL)
+{
+    return FNMutableDictionary::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
 /**
@@ -288,8 +317,9 @@ function md(/** @noinspection PhpUnusedParameterInspection */
  * @return FNDictionary
  */
 function cdict(/** @noinspection PhpUnusedParameterInspection */
-    $key = NULL, $value = NULL) {
-	FNTodo(__FUNCTION__);
+    $key = NULL, $value = NULL)
+{
+    FNTodo(__FUNCTION__);
 }
 
 /**
@@ -299,8 +329,9 @@ function cdict(/** @noinspection PhpUnusedParameterInspection */
  * @return FNSet
  */
 function set(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL) {
-	return FNSet::initWith(call_user_func_array('cdict', func_get_args()));
+    $value = NULL)
+{
+    return FNSet::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
 /**
@@ -310,8 +341,9 @@ function set(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableSet
  */
 function mset(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL) {
-	return FNMutableSet::initWith(call_user_func_array('cdict', func_get_args()));
+    $value = NULL)
+{
+    return FNMutableSet::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
 /**
@@ -321,8 +353,9 @@ function mset(/** @noinspection PhpUnusedParameterInspection */
  * @return void FNDictionary
  */
 function cset(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL) {
-	FNTodo(__FUNCTION__);
+    $value = NULL)
+{
+    FNTodo(__FUNCTION__);
 }
 
 						
