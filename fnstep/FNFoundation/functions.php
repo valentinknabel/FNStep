@@ -17,6 +17,7 @@ use FNFoundation\FNMutableDictionary;
 use FNFoundation\FNMutableSet;
 use FNFoundation\FNMutableString;
 use FNFoundation\FNNumber;
+use FNFoundation\FNProxy;
 use FNFoundation\FNSet;
 use FNFoundation\FNString;
 use FNFoundation\FNTodoException;
@@ -62,6 +63,20 @@ function FNTodo($message = '')
 function con($value)
 {
     return FNContainer::initWith($value);
+}
+
+function c($value, $strict = NO) {
+    if($value instanceof FNContainer)
+        return $value->value();
+    if($value instanceof FNProxy)
+        return $value::objectOf($value);
+    if($value instanceof FNIdentifiable)
+        return $value->genericIdentifier();
+    if($strict)
+        return cstring($value);
+    FNLog('%s: could not convert \'%s\'', __FUNCTION__, cstring($value));
+    return $value;
+
 }
 
 /**

@@ -194,6 +194,8 @@ interface Object
      * @return string
      */
     public function __toString();
+
+    public function isProxy();
 }
 
 trait FNDefaultObject
@@ -383,6 +385,7 @@ trait FNDefaultObject
     public function callMethod($method, /** @noinspection PhpUnusedParameterInspection */
                                $list = NULL /*infinite arguments*/)
     {
+        $params = array_slice(func_get_args(), 1, func_num_args()-2);
         return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), func_get_args());
     }
 
@@ -474,6 +477,11 @@ trait FNDefaultObject
     {
         return '<' . $this::cls() . '>';
     }
+
+    public function isProxy() {
+        return $this instanceof FNProxy;
+    }
+
 }
 
 interface FNComparable
