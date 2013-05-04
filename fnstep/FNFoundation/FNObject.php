@@ -385,8 +385,7 @@ trait FNDefaultObject
     public function callMethod($method, /** @noinspection PhpUnusedParameterInspection */
                                $list = NULL /*infinite arguments*/)
     {
-        $params = array_slice(func_get_args(), 1, func_num_args()-2);
-        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), func_get_args());
+        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), array_slice(func_get_args(), 1, func_num_args()-2));
     }
 
     /**
@@ -413,7 +412,7 @@ trait FNDefaultObject
     public static function callStaticMethod($method, /** @noinspection PhpUnusedParameterInspection */
                                             $list = NULL /*infinite arguments*/)
     {
-        return call_user_func_array(array(static::cls(), cstring($method)), func_get_args());
+        return call_user_func_array(array(static::cls(), cstring($method)), array_slice(func_get_args(), 1, func_num_args()-2));
     }
 
     /**

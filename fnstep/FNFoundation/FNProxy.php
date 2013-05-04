@@ -145,35 +145,13 @@ class FNProxy extends FNObject {
         } else return c($this) == c($value);
     }
 
-    function callInnerStaticMethod(FNString $method ) {
-        $this->call
+    function callInnerStaticMethod(FNString $method, /** @noinspection PhpUnusedParameterInspection */
+                                   $list = NULL) {
+        return call_user_func_array(array($this->object, cstring($method)), array_slice(func_get_args(), 1, func_num_args()-2));
     }
 
-}
+    function callInnerStaticMethodWithArray(FNString $method, array $array) {
+        return call_user_func_array(array($this->object, cstring($method)), $array);
+    }
 
-/**
- * A (non) static function. Calls $method and returns it.
- * @arg string|object $method
- * @args mixed $list = NULL
- * @param $method
- * @param null $list
- * @return mixed
- */
-public function callMethod($method, /** @noinspection PhpUnusedParameterInspection */
-                           $list = NULL /*infinite arguments*/)
-{
-    return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), func_get_args());
-}
-
-/**
- * A (non) static function. Calls $method and returns it.
- * @arg string|object $method
- * @args array $array
- * @param $method
- * @param array $array
- * @return mixed
- */
-public function callMethodWithArray($method, array $array)
-{
-    return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), carray($array));
 }
