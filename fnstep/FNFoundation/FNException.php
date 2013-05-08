@@ -8,10 +8,10 @@
 //
 
 namespace FNFoundation;
-use \Exception;
 
-class FNException extends Exception implements Object
-{
+use Exception;
+
+class FNException extends Exception implements Object {
     use FNDefaultObject;
 
     /**
@@ -26,8 +26,7 @@ class FNException extends Exception implements Object
      * @arg int|FNCountable $code = 0
      * @arg Exception $previous = NULL
      */
-    public function __construct($message = "", $code = 0, Exception $previous = NULL)
-    {
+    public function __construct($message = "", $code = 0, Exception $previous = NULL) {
         parent::__construct(cstring($message), cint($code), $previous);
     }
 
@@ -35,11 +34,9 @@ class FNException extends Exception implements Object
      * Returns the description of the current object.
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         if ($this->previous())
-            return cstring(static::cls(), ': #', $this->code(), ' \'', $this->message(), '\' {', $this->previous(), '}');
-        else return cstring(static::cls(), ': #', $this->code(), ' \'', $this->message(), '\'');
+            return cstring(__FILE__.' '.__LINE__.''.static::cls(), ': #', $this->code(), ' \'', $this->message(), '\' {', $this->previous(), '}'); else return cstring(static::cls(), ': #', $this->code(), ' \'', $this->message(), '\'');
     }
 
     //!Implementation
@@ -47,8 +44,7 @@ class FNException extends Exception implements Object
      * Returns the message.
      * @return FNString
      */
-    public function message()
-    {
+    public function message() {
         return s($this->getMessage());
     }
 
@@ -56,8 +52,7 @@ class FNException extends Exception implements Object
      * Returns the error code.
      * @return FNNumber
      */
-    public function code()
-    {
+    public function code() {
         return n($this->getCode());
     }
 
@@ -65,8 +60,7 @@ class FNException extends Exception implements Object
      * Returns the previous exception
      * @return Exception
      */
-    public function previous()
-    {
+    public function previous() {
         return $this->getPrevious();
     }
 
@@ -74,8 +68,7 @@ class FNException extends Exception implements Object
      * Returns the file name.
      * @return FNString
      */
-    public function fileName()
-    {
+    public function fileName() {
         return s($this->getFile());
     }
 
@@ -83,8 +76,7 @@ class FNException extends Exception implements Object
      * Returns the line.
      * @return FNNumber
      */
-    public function line()
-    {
+    public function line() {
         return n($this->getLine());
     }
 
@@ -92,8 +84,7 @@ class FNException extends Exception implements Object
      * Returns the trace array.
      * @return FNArray
      */
-    public function trace()
-    {
+    public function trace() {
         if (!isset($this->trace))
             $this->trace = a($this->getTrace());
         return $this->trace;
@@ -103,62 +94,48 @@ class FNException extends Exception implements Object
      * Returns the description of the trace. This method may be faster than calling ->trace()->description()
      * @return FNString
      */
-    public function traceDescription()
-    {
+    public function traceDescription() {
         return s($this->getTraceAsString());
     }
 }
 
-class FNVersionException extends FNException
-{
+class FNVersionException extends FNException {
 }
 
-class FNTodoException extends FNException
-{
+class FNTodoException extends FNException {
 }
 
-class FNTypeException extends FNException
-{
+class FNTypeException extends FNException {
 }
 
-class FNImplementationException extends FNException
-{
+class FNImplementationException extends FNException {
 }
 
-class FNUnimplementedFunction extends FNImplementationException
-{
+class FNUnimplementedFunction extends FNImplementationException {
 }
 
-class FNUnimplementedMethod extends FNUnimplementedFunction
-{
+class FNUnimplementedMethod extends FNUnimplementedFunction {
 }
 
-class FNResolvabilityException extends FNException
-{
+class FNResolvabilityException extends FNException {
 }
 
-class FNUnresolvedFunction extends FNResolvabilityException
-{
+class FNUnresolvedFunction extends FNResolvabilityException {
 }
 
-class FNUnresolvedMethod extends FNUnresolvedFunction
-{
+class FNUnresolvedMethod extends FNUnresolvedFunction {
 }
 
-class FNUnresolvedStaticMethod extends FNUnresolvedMethod
-{
+class FNUnresolvedStaticMethod extends FNUnresolvedMethod {
 }
 
-class FNUnresolvedProperty extends FNResolvabilityException
-{
+class FNUnresolvedProperty extends FNResolvabilityException {
 }
 
-class FNSetUnresolvedProperty extends FNUnresolvedProperty
-{
+class FNSetUnresolvedProperty extends FNUnresolvedProperty {
 }
 
-class FNArgumentException extends FNException
-{
+class FNArgumentException extends FNException {
 }
 
 

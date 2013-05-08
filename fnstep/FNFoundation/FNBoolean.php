@@ -9,14 +9,12 @@
 
 namespace FNFoundation;
 
-class FNBoolean extends FNContainer
-{
+class FNBoolean extends FNContainer {
     /**
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return FNBoolean:: initWith($this->value());
     }
 
@@ -24,8 +22,7 @@ class FNBoolean extends FNContainer
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return FNMutableBoolean:: initWith($this->value());
     }
 
@@ -33,8 +30,7 @@ class FNBoolean extends FNContainer
      * Returns an FNBoolean containg TRUE
      * @return FNBoolean
      */
-    public static function yes()
-    {
+    public static function yes() {
         return static:: initWith(TRUE);
     }
 
@@ -42,8 +38,7 @@ class FNBoolean extends FNContainer
      * Returns an FNBoolean containg FALSE
      * @return FNBoolean
      */
-    public static function no()
-    {
+    public static function no() {
         return static:: initWith(FALSE);
     }
 
@@ -54,8 +49,7 @@ class FNBoolean extends FNContainer
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return TRUE;
     }
 
@@ -64,8 +58,7 @@ class FNBoolean extends FNContainer
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         return $value ? TRUE : FALSE;
     }
 
@@ -74,15 +67,13 @@ class FNBoolean extends FNContainer
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return n(1);
     }
 
 }
 
-class FNMutableBoolean extends FNBoolean implements FNMutableContainer
-{
+class FNMutableBoolean extends FNBoolean implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }
 

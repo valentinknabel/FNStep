@@ -7,6 +7,8 @@
 //!Copyright (c) 2013 Valentin Knabel. All rights reserved.
 //
 
+use FNFoundation\FNProxy;
+
 date_default_timezone_set('Europe/Berlin');
 
 require('const.php');
@@ -21,13 +23,17 @@ require('FNFoundation/FNResource.php');
 require('FNFoundation/FNBoolean.php');
 require('FNFoundation/FNNumber.php');
 require('FNFoundation/FNString.php');
-require('FNFoundation/FNPattern.php');
 require('FNFoundation/FNArrayAccess.php');
 require('FNFoundation/FNSet.php');
 require('FNFoundation/FNArray.php');
+require('FNFoundation/FNProxy.php');
 
 //print_r(hash_algos());
 
-$var = s("Hello Welt");
-FNLog($var);
-FNLog('second line');
+class Test {
+    public function printType($var) {
+        echo gettype($var[0]);
+    }
+}
+
+$proxy = FNProxy::initWith(new Test());

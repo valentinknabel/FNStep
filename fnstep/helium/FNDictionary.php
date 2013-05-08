@@ -7,7 +7,7 @@
 //!Copyright © 2013 Valentin Knabel. All rights reserved.
 //
 	
-namespace FNFoundation;
+namespace FNFoundation\Old;
 use \Iterator;
 use \ArrayAccess;
 

@@ -8,10 +8,10 @@
 //
 
 namespace FNFoundation;
-use \Countable;
 
-interface FNCountable extends Countable
-{
+use Countable;
+
+interface FNCountable extends Countable {
     /**
      * Implement size instead.
      * @return int
@@ -25,14 +25,12 @@ interface FNCountable extends Countable
     public function size();
 }
 
-trait FNDefaultCountable
-{
+trait FNDefaultCountable {
     /**
      * Implement size instead.
      * @return int
      */
-    final public function count()
-    {
+    final public function count() {
         return cint($this->size());
     }
 
@@ -43,8 +41,7 @@ trait FNDefaultCountable
     abstract public function size();
 }
 
-interface FNValidatable
-{
+interface FNValidatable {
     /**
      * Returns an instance.
      * @param $value
@@ -67,18 +64,15 @@ interface FNValidatable
     public static function isValidValue($value);
 }
 
-trait FNDefaultValidatable
-{
+trait FNDefaultValidatable {
     /**
      * Returns an instance.
      * @param $value
      * @return FNValidatable|NULL
      */
-    public static function initWith($value)
-    {
+    public static function initWith($value) {
         if (static::isValidValue($value))
-            return new static($value);
-        else return NULL;
+            return new static($value); else return NULL;
     }
 
     /**
@@ -88,8 +82,7 @@ trait FNDefaultValidatable
      * @return boolean
      */
     public static function isValidValue(/** @noinspection PhpUnusedParameterInspection */
-        $value)
-    {
+        $value) {
         throw new FNUnimplementedMethod(__METHOD__);
     }
 
@@ -100,14 +93,12 @@ trait FNDefaultValidatable
      * @return mixed
      */
     public static function convertValue(/** @noinspection PhpUnusedParameterInspection */
-        $value)
-    {
+        $value) {
         throw new FNUnimplementedMethod(__METHOD__);
     }
 }
 
-interface FNIdentifiable
-{
+interface FNIdentifiable {
     /**
      * Returns the id.
      * @return FNString|FNNumber|string|int
@@ -140,8 +131,7 @@ interface FNIdentifiable
 }
 
 /** @noinspection PhpInconsistentReturnPointsInspection */
-trait FNDefaultIdentifiable
-{
+trait FNDefaultIdentifiable {
     /**
      * Returns the id.
      * @return FNString|FNNumber
@@ -152,8 +142,7 @@ trait FNDefaultIdentifiable
      * Returns an identifier.
      * @return FNIdentifier
      */
-    public function identifier()
-    {
+    public function identifier() {
         if ($this instanceof FNIdentifier) {
             return $this;
         }
@@ -165,8 +154,7 @@ trait FNDefaultIdentifiable
      * Returns a numeric identifier.
      * @return FNNumericIdentifier
      */
-    public function numericIdentifier()
-    {
+    public function numericIdentifier() {
         if ($this instanceof FNNumericIdentifier) {
             return $this;
         }
@@ -178,8 +166,7 @@ trait FNDefaultIdentifiable
      * Returns a common identifier.
      * @return FNCommonIdentifier
      */
-    public function commonIdentifier()
-    {
+    public function commonIdentifier() {
         if ($this instanceof FNCommonIdentifier) {
             return $this;
         }
@@ -191,8 +178,7 @@ trait FNDefaultIdentifiable
      * Returns a generic identifier.
      * @return FNGenericIdentifier
      */
-    public function genericIdentifier()
-    {
+    public function genericIdentifier() {
         if ($this instanceof FNGenericIdentifier) {
             return $this;
         }
@@ -201,8 +187,7 @@ trait FNDefaultIdentifiable
     }
 }
 
-abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValidatable, FNComparable, FNCountable
-{
+abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValidatable, FNComparable, FNCountable {
     use FNDefaultIdentifiable, FNDefaultValidatable, FNDefaultCountable;
 
     /**
@@ -211,8 +196,7 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      */
     private $_id;
 
-    protected function __construct($id)
-    {
+    protected function __construct($id) {
         $this->_id = static::convertValue($id);
     }
 
@@ -220,8 +204,7 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      * Returns the description of the current object.
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return $this->_id;
     }
 
@@ -231,8 +214,7 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      * @param FNIdentifiable $id
      * @return FNIdentifier
      */
-    public static function initWithId(FNIdentifiable $id)
-    {
+    public static function initWithId(FNIdentifiable $id) {
         return static::cls() == FNIdentifier::cls() ? FNGenericIdentifier::initWith($id) : FNIdentifier::initWith($id);
     }
 
@@ -243,8 +225,7 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      * @param $value
      * @return boolean
      */
-    public function isEqualTo($value)
-    {
+    public function isEqualTo($value) {
         if (is_object($value)) {
             if ($value instanceof FNIdentifiable) {
                 try {
@@ -263,8 +244,7 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      * Returns the id.
      * @return FNString|FNNumber
      */
-    public function id()
-    {
+    public function id() {
         return $this->_id;
     }
 
@@ -273,23 +253,20 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return $this->id()->size();
     }
 
 }
 
-class FNGenericIdentifier extends FNIdentifier
-{
+class FNGenericIdentifier extends FNIdentifier {
     //!FNValidatable
     /**
      * Returns if the value is valid.
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return cstring($value);
     }
 
@@ -298,22 +275,19 @@ class FNGenericIdentifier extends FNIdentifier
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         return s($value);
     }
 }
 
-class FNNumericIdentifier extends FNIdentifier
-{
+class FNNumericIdentifier extends FNIdentifier {
     //!FNValidatable
     /**
      * Returns if the value is valid.
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return cint($value) == $value;
     }
 
@@ -322,24 +296,21 @@ class FNNumericIdentifier extends FNIdentifier
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         return n(cint($value));
     }
 }
 
-class FNCommonIdentifier extends FNIdentifier
-{
+class FNCommonIdentifier extends FNIdentifier {
     //!FNValidatable
     /**
      * Returns if the value is valid.
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         FNTodo('doesMatch');
-        return cstring($value) != '' && s($value)->doesMatch("/[a-z_][a-z0-9_]+/i");
+        return cstring($value) != '' && s($value)->matches(s("/[a-z_][a-z0-9_]+/i"));
     }
 
     /**
@@ -347,10 +318,9 @@ class FNCommonIdentifier extends FNIdentifier
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         FNTodo('match (only one or none), matches (array)');
-        return s($value)->match(s("/[a-z_][a-z0-9_]+/i"));
+        return s($value)->matches(s("/[a-z_][a-z0-9_]+/i"));
     }
 }
 

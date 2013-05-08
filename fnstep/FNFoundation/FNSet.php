@@ -9,8 +9,7 @@
 
 namespace FNFoundation;
 
-class FNSet extends FNContainer
-{
+class FNSet extends FNContainer {
     //equal for FNContainer means -isEqualTo
     //equal for primitives means ==
     const COMPARE_EQUAL = 1;
@@ -28,11 +27,9 @@ class FNSet extends FNContainer
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         if (is_array($value))
-            return true;
-        else return false;
+            return true; else return false;
     }
 
     /**
@@ -40,8 +37,7 @@ class FNSet extends FNContainer
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         if (is_array($value)) {
             //remove doubled values
             $array = array_unique($value, SORT_REGULAR);
@@ -59,8 +55,7 @@ class FNSet extends FNContainer
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return n(count($this->value()));
     }
 
@@ -69,8 +64,7 @@ class FNSet extends FNContainer
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return FNMutableSet::initWith($this->value());
     }
 
@@ -78,8 +72,7 @@ class FNSet extends FNContainer
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return FNSet::initWith($this->value());
     }
 
@@ -89,8 +82,7 @@ class FNSet extends FNContainer
      * @param FNArray $array
      * @return FNSet
      */
-    static function initWithArray(FNArray $array)
-    {
+    static function initWithArray(FNArray $array) {
         return static::initWith($array->value());
     }
 
@@ -100,8 +92,7 @@ class FNSet extends FNContainer
      * @return FNSet
      */
     static function initWithList(/** @noinspection PhpUnusedParameterInspection */
-        $first = NULL)
-    {
+        $first = NULL) {
         return static:: callStaticMethodWithArray('initWith', func_get_args());
     }
 
@@ -111,8 +102,7 @@ class FNSet extends FNContainer
      * @param \FNFoundation\object|object $object $object
      * @return boolean
      */
-    function contains(object $object)
-    {
+    function contains(object $object) {
         return in_array($object, $this->value());
     }
 
@@ -123,8 +113,7 @@ class FNSet extends FNContainer
      * @return FNSet
      */
     function add(/** @noinspection PhpUnusedParameterInspection */
-        object $object)
-    {
+        object $object) {
         $value = $this->value();
         foreach (func_get_args() as $arg) {
             if (!$this->contains($arg) && $arg instanceof object) {
@@ -139,8 +128,7 @@ class FNSet extends FNContainer
      * @param \FNFoundation\object|object $object $object
      * @return FNSet
      */
-    function remove(object $object)
-    {
+    function remove(object $object) {
         $temp = $this->value();
         foreach ($temp as $key => $value) {
             if ($value === $object) {
@@ -156,8 +144,7 @@ class FNSet extends FNContainer
      * @param FNSet $set
      * @return FNSet
      */
-    function removeSet(FNSet $set)
-    {
+    function removeSet(FNSet $set) {
         $temp = $this->value();
         foreach ($set->value() as $value) {
             foreach ($temp as $key => $object) {
@@ -175,8 +162,7 @@ class FNSet extends FNContainer
      * @param FNSet $set
      * @return FNSet
      */
-    function mergeWithSet(FNSet $set)
-    {
+    function mergeWithSet(FNSet $set) {
         return $this->returnObjectWith(array_merge($this->value(), $set->value()));
     }
 
@@ -187,8 +173,7 @@ class FNSet extends FNContainer
      * @param int $mode
      * @return boolean
      */
-    static private function compare($value1, $value2, $mode)
-    {
+    static private function compare($value1, $value2, $mode) {
         switch ($mode) {
             case FNSet::COMPARE_EQUAL:
                 if ($value1 instanceof FNContainer && $value2 instanceof FNContainer) {
@@ -214,8 +199,7 @@ class FNSet extends FNContainer
      * @method arrayWithAll
      * @return FNArray
      */
-    function arrayWithAll()
-    {
+    function arrayWithAll() {
         return FNArray::initWith($this->value());
     }
 
@@ -224,8 +208,7 @@ class FNSet extends FNContainer
      * @param FNString $FNci
      * @return FNArray;
      */
-    function arrayWithInstancesOf(FNString $FNci)
-    {
+    function arrayWithInstancesOf(FNString $FNci) {
         $temp = array();
         foreach ($this->value() as $object) {
             $string = $FNci->value();
@@ -246,8 +229,7 @@ class FNSet extends FNContainer
      * @param FNString $FNci
      * @return FNSet
      */
-    function setWithInstancesOf(FNString $FNci)
-    {
+    function setWithInstancesOf(FNString $FNci) {
         return static::returnObjectWith($this->arrayWithInstancesOf($FNci)->value());
     }
 
@@ -259,12 +241,13 @@ class FNSet extends FNContainer
      * @param int $mode
      * @return FNArray
      */
-    function arrayWithMethodReturned(FNString $method, FNArray $arguments, $value, $mode = FNSet::COMPARE_EQUAL)
-    {
+    function arrayWithMethodReturned(FNString $method, FNArray $arguments, $value, $mode = FNSet::COMPARE_EQUAL) {
         $temp = array();
         $method = $method->value();
         foreach ($this->value() as $object) {
-            if (static::compare(call_user_func_array(array($object, $method->value()), $arguments->value()), $value, $mode))
+            if (static::compare(call_user_func_array(array($object, $method->value()
+            ), $arguments->value()), $value, $mode)
+            )
                 $temp[] = $object;
         }
         return FNArray::initWith($temp);
@@ -278,8 +261,7 @@ class FNSet extends FNContainer
      * @param int $mode
      * @return FNSet
      */
-    function setWithMethodReturned(FNString $method, FNArray $arguments, $value, $mode = FNSet::COMPARE_EQUAL)
-    {
+    function setWithMethodReturned(FNString $method, FNArray $arguments, $value, $mode = FNSet::COMPARE_EQUAL) {
         return static::returnObjectWith($this->arrayWithMethodReturned($method, $arguments, $value, $mode)->value());
     }
 
@@ -290,8 +272,7 @@ class FNSet extends FNContainer
      * @param int $mode
      * @return FNArray
      */
-    function arrayWithMethod(FNString $method, FNArray $arguments, $mode = FNSet::RETURNED_TRUE)
-    {
+    function arrayWithMethod(FNString $method, FNArray $arguments, $mode = FNSet::RETURNED_TRUE) {
         $temp = array();
         $method = $method->value();
         foreach ($this->value() as $object) {
@@ -311,14 +292,12 @@ class FNSet extends FNContainer
      * @param int $mode
      * @return FNSet
      */
-    function setWithMethod(FNString $method, FNArray $arguments, $mode = FNSet::RETURNED_TRUE)
-    {
+    function setWithMethod(FNString $method, FNArray $arguments, $mode = FNSet::RETURNED_TRUE) {
         return static::returnObjectWith($this->arrayWithMethod($method, $arguments, $mode)->value());
     }
 
 }
 
-class FNMutableSet extends FNSet implements FNMutableContainer
-{
+class FNMutableSet extends FNSet implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }

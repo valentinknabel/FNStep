@@ -7,6 +7,9 @@
 //!Copyright (c) 2013 Valentin Knabel. All rights reserved.
 //
 
+//!––––––––––––––––––––––––––––––––
+//!constants
+
 use FNFoundation\FNArgumentException;
 use FNFoundation\FNArray;
 use FNFoundation\FNContainer;
@@ -24,9 +27,6 @@ use FNFoundation\FNTodoException;
 use FNFoundation\FNVersionException;
 use FNFoundation\Object;
 
-//!––––––––––––––––––––––––––––––––
-//!constants
-
 define('NULL_TYPE', gettype(NULL));
 define('BOOLEAN_TYPE', gettype(TRUE));
 define('INTEGER_TYPE', gettype(0));
@@ -40,7 +40,9 @@ define('OBJECT_TYPE', 'object');
 //!functions
 
 function FNLog($message = '') {
-    if(DEBUG) echo '['.date("Y-m-d H:i:s").' '.basename($_SERVER["SCRIPT_FILENAME"], '.php').'] '.$message.PHP_EOL.(HTML_DISABLED ? '' : '<br/>');
+    if (DEBUG)
+        echo '[' . date("Y-m-d H:i:s") . ' ' . basename($_SERVER["SCRIPT_FILENAME"], '.php') . '] ' . $message . PHP_EOL . (HTML_DISABLED ?
+            '' : '<br/>');
 }
 
 /**
@@ -49,8 +51,7 @@ function FNLog($message = '') {
  * @throws FNFoundation\FNTodoException
  * @return void
  */
-function FNTodo($message = '')
-{
+function FNTodo($message = '') {
     throw new FNTodoException($message);
 }
 
@@ -60,22 +61,40 @@ function FNTodo($message = '')
  * @param $value
  * @return FNContainer
  */
-function con($value)
-{
+function con($value) {
     return FNContainer::initWith($value);
 }
 
 function c($value, $strict = NO) {
-    if($value instanceof FNContainer)
-        return $value->value();
-    if($value instanceof FNProxy)
-        return $value::objectOf($value);
-    if($value instanceof FNIdentifiable)
-        return $value->genericIdentifier();
-    if($strict)
-        return cstring($value);
-    FNLog('%s: could not convert \'%s\'', __FUNCTION__, cstring($value));
-    return $value;
+    switch (gettype($value)) {
+        case OBJECT_TYPE:
+            if ($value instanceof \Traversable) {
+                $array = array();
+                foreach($value as $key => $val) {
+                    $array[$key] = c($val);
+                }
+                return $array;
+                break;
+            }
+            if ($value instanceof FNContainer)
+                return $value->value();
+            if ($value instanceof FNProxy)
+                return $value::objectOf($value);
+            if ($value instanceof FNIdentifiable)
+                return $value->genericIdentifier();
+            if ($strict)
+                return cstring($value);
+        case ARRAY_TYPE:
+            $array = array();
+            foreach($value as $key => $val) {
+                $array[$key] = c($val);
+            }
+            return $array;
+            break;
+        default:
+            return $value;
+
+    }
 
 }
 
@@ -84,8 +103,7 @@ function c($value, $strict = NO) {
  * @param $value
  * @return FNNumber
  */
-function n($value)
-{
+function n($value) {
     return FNNumber::initWith(cnumber($value));
 }
 
@@ -96,8 +114,7 @@ function n($value)
  * @throws FNFoundation\FNVersionException
  * @return number
  */
-function cnumber($value)
-{
+function cnumber($value) {
     switch (gettype($value)) {
         case NULL_TYPE:
             return 0;
@@ -145,8 +162,7 @@ function cnumber($value)
  * @param $value
  * @return int
  */
-function cint($value)
-{
+function cint($value) {
     return intval(cnumber($value));
 }
 
@@ -157,8 +173,7 @@ function cint($value)
  * @return FNString
  */
 function s(/** @noinspection PhpUnusedParameterInspection */
-    $value = '')
-{
+    $value = '') {
     return FNString:: initWith(func_get_args());
 }
 
@@ -169,8 +184,7 @@ function s(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableString
  */
 function ms(/** @noinspection PhpUnusedParameterInspection */
-    $value = '')
-{
+    $value = '') {
     return FNMutableString:: initWith(func_get_args());
 }
 
@@ -182,8 +196,7 @@ function ms(/** @noinspection PhpUnusedParameterInspection */
  * @throws FNFoundation\FNVersionException
  * @return string
  */
-function cstring($value = '')
-{
+function cstring($value = '') {
     if (func_num_args() == 1) {
         switch (gettype($value)) {
             case NULL_TYPE:
@@ -200,7 +213,8 @@ function cstring($value = '')
                 $string = '';
                 /** @noinspection PhpWrongForeachArgumentTypeInspection */
                 foreach ($value as $needle) {
-                    if ($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
+                    if ($needle == $value)
+                        throw new FNArgumentException('Recursive arrays can\'t be printed');
                     $string .= cstring($needle);
                 }
                 return $string;
@@ -210,7 +224,8 @@ function cstring($value = '')
                 if ($value instanceof Traversable) {
                     $string = '';
                     foreach ($value as $needle) {
-                        if ($needle == $value) throw new FNArgumentException('Recursive arrays can\'t be printed');
+                        if ($needle == $value)
+                            throw new FNArgumentException('Recursive arrays can\'t be printed');
                         $string .= cstring($needle);
                     }
                     return $string;
@@ -244,8 +259,7 @@ function cstring($value = '')
  * @return FNArray
  */
 function a(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL)
-{
+    $value = NULL) {
     return FNArray::initWith(call_user_func_array('carray', func_get_args()));
 }
 
@@ -256,8 +270,7 @@ function a(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableArray
  */
 function ma(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL)
-{
+    $value = NULL) {
     return FNMutableArray::initWith(call_user_func_array('carray', func_get_args()));
 }
 
@@ -268,8 +281,7 @@ function ma(/** @noinspection PhpUnusedParameterInspection */
  * @return array
  */
 function carray(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL)
-{
+    $value = NULL) {
     return carraya(func_get_args());
 }
 
@@ -279,8 +291,7 @@ function carray(/** @noinspection PhpUnusedParameterInspection */
  * @param null $value
  * @return array
  */
-function carraya($value)
-{
+function carraya($value) {
     return array_values($value);
 }
 
@@ -293,8 +304,7 @@ function carraya($value)
  * @return FNDictionary
  */
 function d(/** @noinspection PhpUnusedParameterInspection */
-    $key = NULL, $value = NULL)
-{
+    $key = NULL, $value = NULL) {
     return FNDictionary::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
@@ -307,8 +317,7 @@ function d(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableDictionary
  */
 function md(/** @noinspection PhpUnusedParameterInspection */
-    $key = NULL, $value = NULL)
-{
+    $key = NULL, $value = NULL) {
     return FNMutableDictionary::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
@@ -321,8 +330,7 @@ function md(/** @noinspection PhpUnusedParameterInspection */
  * @return FNDictionary
  */
 function cdict(/** @noinspection PhpUnusedParameterInspection */
-    $key = NULL, $value = NULL)
-{
+    $key = NULL, $value = NULL) {
     FNTodo(__FUNCTION__);
 }
 
@@ -333,8 +341,7 @@ function cdict(/** @noinspection PhpUnusedParameterInspection */
  * @return FNSet
  */
 function set(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL)
-{
+    $value = NULL) {
     return FNSet::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
@@ -345,8 +352,7 @@ function set(/** @noinspection PhpUnusedParameterInspection */
  * @return FNMutableSet
  */
 function mset(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL)
-{
+    $value = NULL) {
     return FNMutableSet::initWith(call_user_func_array('cdict', func_get_args()));
 }
 
@@ -357,8 +363,7 @@ function mset(/** @noinspection PhpUnusedParameterInspection */
  * @return void FNDictionary
  */
 function cset(/** @noinspection PhpUnusedParameterInspection */
-    $value = NULL)
-{
+    $value = NULL) {
     FNTodo(__FUNCTION__);
 }
 

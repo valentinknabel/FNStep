@@ -9,8 +9,7 @@
 
 namespace FNFoundation;
 
-class FNNil extends FNContainer
-{
+class FNNil extends FNContainer {
 
     //!FNObject
     /**
@@ -22,8 +21,8 @@ class FNNil extends FNContainer
      * @throws FNUnresolvedMethod
      * @return mixed
      */
-    public function unresolvedMethod(FNString $function, array $arguments)
-    {
+    public function unresolvedMethod(FNString $function, array $arguments) {
+        FNLog("%s: %s", __METHOD__, cstring($function));
         if (DEBUG) {
             throw new FNUnresolvedMethod($function);
         } else return NULL;
@@ -38,8 +37,8 @@ class FNNil extends FNContainer
      * @throws FNUnresolvedStaticMethod
      * @return mixed
      */
-    public static function unresolvedStaticMethod(FNString $function, array $arguments)
-    {
+    public static function unresolvedStaticMethod(FNString $function, array $arguments) {
+        FNLog("%s: %s", __METHOD__, cstring($function));
         if (DEBUG) {
             throw new FNUnresolvedStaticMethod($function);
         } else return NULL;
@@ -51,8 +50,7 @@ class FNNil extends FNContainer
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return TRUE;
     }
 
@@ -61,8 +59,7 @@ class FNNil extends FNContainer
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         return NULL;
     }
 
@@ -70,8 +67,7 @@ class FNNil extends FNContainer
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return $this;
     }
 
@@ -79,8 +75,7 @@ class FNNil extends FNContainer
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return $this;
     }
 
@@ -89,8 +84,8 @@ class FNNil extends FNContainer
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
+        FNLog("%s", __METHOD__);
         return n(0);
     }
 

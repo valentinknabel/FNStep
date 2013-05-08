@@ -10,11 +10,9 @@
 namespace FNFoundation;
 
 
-class FNResource extends FNContainer
-{
+class FNResource extends FNContainer {
 
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return is_resource($value);
     }
 
@@ -22,8 +20,7 @@ class FNResource extends FNContainer
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return FNMutableResource::initWith($this->value());
     }
 
@@ -31,8 +28,7 @@ class FNResource extends FNContainer
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return self::initWith($this->value());
     }
 
@@ -40,19 +36,16 @@ class FNResource extends FNContainer
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return n($this->value());
     }
 
-    public function type()
-    {
+    public function type() {
         return s(get_resource_type($this->value()));
     }
 
 }
 
-class FNMutableResource extends FNResource
-{
+class FNMutableResource extends FNResource {
     use FNDefaultMutableContainer;
 }

@@ -14,15 +14,13 @@ namespace FNFoundation;
  * This class is only for containing objects, not for using them. Use FNProxy in order to call contained methods.
  * @package FNFoundation
  */
-class FNObjectContainer extends FNContainer
-{
+class FNObjectContainer extends FNContainer {
 
     /**
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return FNMutableObjectContainer::initWith($this->value());
     }
 
@@ -30,8 +28,7 @@ class FNObjectContainer extends FNContainer
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return self::initWith($this->value());
     }
 
@@ -39,20 +36,17 @@ class FNObjectContainer extends FNContainer
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return n(cint($this->value()));
     }
 
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return is_object($value);
     }
 
 
 }
 
-class FNMutableObjectContainer extends FNObjectContainer
-{
+class FNMutableObjectContainer extends FNObjectContainer {
     use FNDefaultMutableContainer;
 }
