@@ -532,8 +532,12 @@ class FNString extends FNContainer {
      * @param FNString $pattern
      * @return bool
      */
-    function matches(FNString $pattern) {
+    function matchesPattern(FNString $pattern) {
         return mb_ereg_match($this->value(), $pattern->value());
+    }
+
+    function replacePattern(FNString $pattern, FNString $replacement) {
+        return $this->returnObjectWith(mb_ereg_replace($pattern->value(), $replacement->value(), $this->value()));
     }
 
     ##Security
