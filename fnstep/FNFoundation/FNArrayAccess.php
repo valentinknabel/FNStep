@@ -83,7 +83,7 @@ trait FNContainerArrayAccess {
 
 }
 
-trait FNDefaultIteratable {
+trait FNDefaultTraversable {
 
 }
 

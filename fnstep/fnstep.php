@@ -26,14 +26,6 @@ require('FNFoundation/FNString.php');
 require('FNFoundation/FNArrayAccess.php');
 require('FNFoundation/FNSet.php');
 require('FNFoundation/FNArray.php');
+require('FNFoundation/FNDictionary.php');
 require('FNFoundation/FNProxy.php');
 
-//print_r(hash_algos());
-
-class Test {
-    public function printType($var) {
-        echo gettype($var[0]);
-    }
-}
-
-$proxy = FNProxy::initWith(new Test());

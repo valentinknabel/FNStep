@@ -69,20 +69,20 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
     }
 
     function offsetSet($offset, $value) {
-        if (!($offset instanceof FNNumber))
-            $offset = FNNumber::initWith($offset);
-        if ($offset instanceof FNNumber && $value instanceof object) {
-            $temp = $this->value()[$offset->value()];
+        if (!($offset instanceof FNString))
+            $offset = FNString::initWith($offset);
+        if ($offset instanceof FNString && $value instanceof object) {
+            $temp = $this->value();
             $temp[$offset->value()] = $value;
             return $this->returnObjectWith($temp);
         } else return false;
     }
 
     function offsetUnset($offset) {
-        if (!($offset instanceof FNNumber))
-            $offset = FNNumber::initWith($offset);
+        if (!($offset instanceof FNString))
+            $offset = FNString::initWith($offset);
         if ($offset instanceof FNContainer) {
-            $temp = $this->value()[$offset->value()];
+            $temp = $this->value();
             unset($temp[$offset->value()]);
             return $this->returnObjectWith($temp);
         } else return false;
@@ -156,8 +156,16 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
     function valueForId(FNIdentifiable $id) {
         return $this->value()[$id->genericIdentifier()->id()->value()];
     }
+
+    function addDictionary(FNDictionary $dictionary) {
+
+    }
+
+    function addValuesWithKeys(FNArray $values, FNArray $keys) {
+
+    }
 }
 
-class FNMutableDictionary extends FNDictionary {
+class FNMutableDictionary extends FNDictionary implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }
