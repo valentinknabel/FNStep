@@ -9,6 +9,10 @@
 
 namespace FNFoundation;
 
+/**
+ * Class FNNil
+ * @package FNFoundation
+ */
 class FNNil extends FNContainer {
 
     //!FNObject

@@ -9,6 +9,10 @@
 
 namespace FNFoundation;
 
+/**
+ * Class FNNumber
+ * @package FNFoundation
+ */
 class FNNumber extends FNContainer implements FNCountable {
 
     const ROUND_HALF_UP = PHP_ROUND_HALF_UP;
@@ -94,6 +98,11 @@ class FNNumber extends FNContainer implements FNCountable {
         return static::initWith(0);
     }
 
+    /**
+     * @param $value
+     * @param int $round
+     * @return mixed
+     */
     static function initIntegerWith($value, $round = FNNumber::ROUND_HALF_UP) {
         /** @noinspection PhpUndefinedMethodInspection */
         return static::initWith($value)->round(FNNumber::zero(), $round);
@@ -163,6 +172,9 @@ class FNNumber extends FNContainer implements FNCountable {
      * @link http://de2.php.net/manual/en/function.sin.php
      */
     //sin,cos,tan
+    /**
+     * @return FNNumber
+     */
     function sine() {
         return $this->returnObjectWith(sin($this->value()));
     }
@@ -432,6 +444,10 @@ class FNNumber extends FNContainer implements FNCountable {
 
     //@MODEND
 
+    /**
+     * @param FNNumber $exponent
+     * @return FNContainer
+     */
     function power(FNNumber $exponent) {
         return $this->returnObjectWith(pow($this->value(), $exponent->value()));
     }
@@ -606,6 +622,10 @@ class FNNumber extends FNContainer implements FNCountable {
 
 }
 
+/**
+ * Class FNMutableNumber
+ * @package FNFoundation
+ */
 class FNMutableNumber extends FNNumber implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }

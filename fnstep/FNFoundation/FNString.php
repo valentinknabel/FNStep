@@ -10,6 +10,10 @@
 namespace FNFoundation;
 use FNFoundation\FNNumber;
 
+/**
+ * Class FNString
+ * @package FNFoundation
+ */
 class FNString extends FNContainer {
     const CASE_LOWER = MB_CASE_LOWER;
     const CASE_UPPER = MB_CASE_UPPER;
@@ -160,6 +164,10 @@ class FNString extends FNContainer {
         return static::initWith($string);
     }
 
+    /**
+     * @param FNArray $array
+     * @return FNValidatable|NULL
+     */
     static function initWithArray(FNArray $array) {
         $value = '';
         foreach ($array as $string) {
@@ -168,11 +176,20 @@ class FNString extends FNContainer {
         return static::initWith($value);
     }
 
+    /**
+     * @param $value
+     * @param string $encoding
+     * @return FNValidatable|NULL
+     */
     public static function initWith($value, $encoding = FNString::STANDARD_ENCODING) {
         return parent::initWith(mb_convert_encoding(cstring($value), $encoding));
     }
 
 
+    /**
+     * @param string $arg
+     * @return FNValidatable|NULL
+     */
     static function initWithList(/** @noinspection PhpUnusedParameterInspection */
         $arg = '') {
         $value = '';
@@ -192,6 +209,9 @@ class FNString extends FNContainer {
         return mb_convert_encoding($this->value(), $encoding);
     }
 
+    /**
+     * @return string
+     */
     function encoding() {
         return mb_detect_encoding($this->value());
     }
@@ -508,6 +528,9 @@ class FNString extends FNContainer {
 
     ##RegExp
 
+    /**
+     * @param FNString $pattern
+     */
     function matches(FNString $pattern) {
 
     }
@@ -930,6 +953,10 @@ class FNString extends FNContainer {
     }
 
 
+    /**
+     * @param FNContainer $container
+     * @return FNContainer
+     */
     function format(/** @noinspection PhpUnusedParameterInspection */
         FNContainer $container = NULL /*infinite arguments*/) {
         $array = array($this->value());
@@ -943,6 +970,10 @@ class FNString extends FNContainer {
         return $this->returnObjectWith(call_user_func_array('sprintf', func_get_args()));
     }
 
+    /**
+     * @param FNArray $containers
+     * @return FNContainer
+     */
     function formatArray(FNArray $containers) {
         $array = array($this->value());
 
@@ -957,6 +988,10 @@ class FNString extends FNContainer {
 
 }
 
+/**
+ * Class FNMutableString
+ * @package FNFoundation
+ */
 class FNMutableString extends FNString implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }
