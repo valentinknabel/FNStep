@@ -8,10 +8,10 @@
 //
 
 namespace FNFoundation;
-use \ArrayAccess;
 
-interface FNArrayAccess extends ArrayAccess
-{
+use ArrayAccess;
+
+interface FNArrayAccess extends ArrayAccess {
     function idExists(FNIdentifiable $id);
 
     function unsetId(FNIdentifiable $id);
@@ -21,8 +21,7 @@ interface FNArrayAccess extends ArrayAccess
     function valueForId(FNIdentifiable $id);
 }
 
-trait FNContainerArrayAccess
-{
+trait FNContainerArrayAccess {
     abstract function offsetExists($offset);
 
     abstract function offsetUnset($offset);
@@ -37,8 +36,7 @@ trait FNContainerArrayAccess
      * @param \FNFoundation\FNIdentifiable|\FNFoundation\FNNumber $index
      * @return boolean
      */
-    function idExists(FNIdentifiable $index)
-    {
+    function idExists(FNIdentifiable $index) {
         /** @noinspection PhpUndefinedMethodInspection */
         return isset($this->value()[$index->numericIdentifier()]);
     }
@@ -50,8 +48,7 @@ trait FNContainerArrayAccess
      * @param \FNFoundation\object|object $value
      * @return $this
      */
-    function setValueForId(FNIdentifiable $index, object $value)
-    {
+    function setValueForId(FNIdentifiable $index, object $value) {
         /** @noinspection PhpUndefinedMethodInspection */
         $array = $this->value();
         $array[$index->numericIdentifier()] = $value;
@@ -65,8 +62,7 @@ trait FNContainerArrayAccess
      * @param \FNFoundation\FNIdentifiable|\FNFoundation\FNNumber $index
      * @return FNArray
      */
-    function valueForId(FNIdentifiable $index)
-    {
+    function valueForId(FNIdentifiable $index) {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->value()[$index->numericIdentifier()];
     }
@@ -77,14 +73,17 @@ trait FNContainerArrayAccess
      * @param \FNFoundation\FNIdentifiable|\FNFoundation\FNNumber $index
      * @return FNArray
      */
-    function unsetId(FNIdentifiable $index)
-    {
+    function unsetId(FNIdentifiable $index) {
         /** @noinspection PhpUndefinedMethodInspection */
         $array = $this->value();
         unset($array[$index->numericIdentifier()]);
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->returnObjectWith($array);
     }
+
+}
+
+trait FNDefaultIteratable {
 
 }
 

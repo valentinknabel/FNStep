@@ -9,8 +9,7 @@
 
 namespace FNFoundation;
 
-interface FNMutableContainer extends FNMutable
-{
+interface FNMutableContainer extends FNMutable {
     /**
      * Sets the value of the container.
      * @arg mixed $value
@@ -20,23 +19,20 @@ interface FNMutableContainer extends FNMutable
     public function setValue($value);
 }
 
-trait FNDefaultMutableContainer
-{
+trait FNDefaultMutableContainer {
     /**
      * Sets the value of the container.
      * @arg mixed $value
      * @param $value
      * @return void
      */
-    public function setValue($value)
-    {
+    public function setValue($value) {
         /** @noinspection PhpUndefinedMethodInspection */
         $this->returnObjectWith($value);
     }
 }
 
-abstract class FNContainer extends FNObject implements FNComparable, FNCountable, FNValidatable
-{
+abstract class FNContainer extends FNObject implements FNComparable, FNCountable, FNValidatable {
     use FNDefaultCountable;
 
     /**
@@ -45,8 +41,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      */
     private $_value;
 
-    protected function __construct($value)
-    {
+    protected function __construct($value = NULL) {
         $this->_value = static::convertValue($value);
     }
 
@@ -54,8 +49,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * Returns the description of the current object.
      * @return FNString
      */
-    public function __toString()
-    {
+    public function __toString() {
         return cstring($this->_value);
     }
 
@@ -66,8 +60,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * @param $value
      * @return FNContainer
      */
-    protected function returnObjectWith($value)
-    {
+    protected function returnObjectWith($value) {
         if ($this->isMutable()) {
             $this->_value = static:: convertValue($value);
             return $this;
@@ -78,8 +71,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * Returns the represented value
      * @return mixed
      */
-    public function value()
-    {
+    public function value() {
         return $this->_value;
     }
 
@@ -102,8 +94,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * @param $value
      * @return boolean
      */
-    public function isEqualTo($value)
-    {
+    public function isEqualTo($value) {
         if (static::isValidValue($value)) {
             $value = static::convertValue($value);
             if ($this->_value instanceof FNComparable) {
@@ -119,12 +110,10 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * @throws FNVersionException
      * @return FNValidatable|NULL
      */
-    public static function initWith($value)
-    {
+    public static function initWith($value) {
         if (static::cls() != FNContainer::cls()) {
             if (static::isValidValue($value))
-                return new static($value);
-            else return NULL;
+                return new static($value); else return NULL;
         } else {
             switch (gettype($value)) {
                 case NULL_TYPE:
@@ -178,8 +167,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * @throws FNUnimplementedMethod
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         throw new FNUnimplementedMethod(__METHOD__);
     }
 
@@ -189,8 +177,7 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      * @throws FNUnimplementedMethod
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         throw new FNUnimplementedMethod(__METHOD__);
     }
 

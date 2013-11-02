@@ -9,12 +9,10 @@
 
 namespace FNFoundation;
 
-interface FNMutable
-{
+interface FNMutable {
 }
 
-interface Object
-{
+interface Object {
     /**
      * This method is declared as protected to disallow the use of the new-operator outside of this class and its subclasses.
      */
@@ -198,14 +196,12 @@ interface Object
     public function isProxy();
 }
 
-trait FNDefaultObject
-{
+trait FNDefaultObject {
     //!additions
     /**
      * This method is declared as protected to disallow the use of the new-operator outside of this class and its subclasses.
      */
-    protected function __construct()
-    {
+    protected function __construct() {
     }
 
     /**
@@ -216,8 +212,7 @@ trait FNDefaultObject
      * @param array $arguments
      * @return mixed
      */
-    final public function __call($function, array $arguments)
-    {
+    final public function __call($function, array $arguments) {
         return $this->unresolvedMethod(s($function), $arguments);
     }
 
@@ -231,8 +226,7 @@ trait FNDefaultObject
      * @return mixed
      */
     public function unresolvedMethod(FNString $function, /** @noinspection PhpUnusedParameterInspection */
-                                     array $arguments)
-    {
+                                     array $arguments) {
         throw new FNUnresolvedMethod($function);
     }
 
@@ -244,8 +238,7 @@ trait FNDefaultObject
      * @param array $arguments
      * @return mixed
      */
-    final public static function __callStatic($function, array $arguments)
-    {
+    final public static function __callStatic($function, array $arguments) {
         return static:: unresolvedStaticMethod(s($function), $arguments);
     }
 
@@ -259,8 +252,7 @@ trait FNDefaultObject
      * @return mixed
      */
     public static function unresolvedStaticMethod(FNString $function, /** @noinspection PhpUnusedParameterInspection */
-                                                  array $arguments)
-    {
+                                                  array $arguments) {
         throw new FNUnresolvedStaticMethod($function);
     }
 
@@ -270,8 +262,7 @@ trait FNDefaultObject
      * @param $property
      * @return mixed
      */
-    final public function __get($property)
-    {
+    final public function __get($property) {
         return $this->unresolvedProperty(s($property));
     }
 
@@ -282,8 +273,7 @@ trait FNDefaultObject
      * @throws FNUnresolvedProperty
      * @return mixed
      */
-    public function unresolvedProperty(FNString $property)
-    {
+    public function unresolvedProperty(FNString $property) {
         try {
             return $this->callMethod($property);
         } catch (FNUnresolvedMethod $exception) {
@@ -299,8 +289,7 @@ trait FNDefaultObject
      * @param $value
      * @return void
      */
-    final public function __set($property, $value)
-    {
+    final public function __set($property, $value) {
         $this->setUnresolvedProperty(s($property), $value);
     }
 
@@ -313,8 +302,7 @@ trait FNDefaultObject
      * @throws FNSetUnresolvedProperty
      * @return void
      */
-    public function setUnresolvedProperty(FNString $property, $value)
-    {
+    public function setUnresolvedProperty(FNString $property, $value) {
         $setter = s('set')->appendString($property->firstCharacterToUpperCase());
         /** @var $this Object */
         try {
@@ -329,8 +317,7 @@ trait FNDefaultObject
      * Returns a new instance or NULL
      * @return Object|NULL
      */
-    public static function init()
-    {
+    public static function init() {
         return new static();
     }
 
@@ -338,8 +325,7 @@ trait FNDefaultObject
      * Returns the parent's class name.
      * @return string
      */
-    public static function super()
-    {
+    public static function super() {
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUndefinedClassInspection */
         return parent:: cls();
@@ -349,8 +335,7 @@ trait FNDefaultObject
      * Returns the current class name.
      * @return string
      */
-    public static function cls()
-    {
+    public static function cls() {
         return get_called_class();
     }
 
@@ -359,8 +344,7 @@ trait FNDefaultObject
      * @param $method
      * @return boolean
      */
-    public function respondsToMethod($method)
-    {
+    public function respondsToMethod($method) {
         return method_exists(isset($this) ? $this : static::cls(), cstring($method));
     }
 
@@ -369,8 +353,7 @@ trait FNDefaultObject
      * @param $method
      * @return boolean
      */
-    public static function respondsToStaticMethod($method)
-    {
+    public static function respondsToStaticMethod($method) {
         return method_exists(static::cls(), cstring($method));
     }
 
@@ -383,10 +366,9 @@ trait FNDefaultObject
      * @return mixed
      */
     public function callMethod($method, /** @noinspection PhpUnusedParameterInspection */
-                               $list = NULL /*infinite arguments*/)
-    {
-        $params = array_slice(func_get_args(), 1, func_num_args()-2);
-        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), func_get_args());
+                               $list = NULL /*infinite arguments*/) {
+        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)
+        ), array_slice(func_get_args(), 1, func_num_args() - 2));
     }
 
     /**
@@ -397,8 +379,7 @@ trait FNDefaultObject
      * @param array $array
      * @return mixed
      */
-    public function callMethodWithArray($method, array $array)
-    {
+    public function callMethodWithArray($method, array $array) {
         return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), carray($array));
     }
 
@@ -411,9 +392,9 @@ trait FNDefaultObject
      * @return mixed
      */
     public static function callStaticMethod($method, /** @noinspection PhpUnusedParameterInspection */
-                                            $list = NULL /*infinite arguments*/)
-    {
-        return call_user_func_array(array(static::cls(), cstring($method)), func_get_args());
+                                            $list = NULL /*infinite arguments*/) {
+        return call_user_func_array(array(static::cls(), cstring($method)
+        ), array_slice(func_get_args(), 1, func_num_args() - 2));
     }
 
     /**
@@ -424,8 +405,7 @@ trait FNDefaultObject
      * @param array $array
      * @return mixed
      */
-    public static function callStaticMethodWithArray($method, array $array)
-    {
+    public static function callStaticMethodWithArray($method, array $array) {
         return call_user_func_array(array(static::cls(), cstring($method)), carray($array));
     }
 
@@ -435,8 +415,7 @@ trait FNDefaultObject
      * @param $type
      * @return boolean
      */
-    public function isKindOf($type)
-    {
+    public function isKindOf($type) {
         return $this instanceof $type;
     }
 
@@ -446,8 +425,7 @@ trait FNDefaultObject
      * @param $class
      * @return boolean
      */
-    public function isMemberOf($class)
-    {
+    public function isMemberOf($class) {
         return $this::cls() == cstring($class);
     }
 
@@ -455,8 +433,7 @@ trait FNDefaultObject
      * Returns if the given object is mutable.
      * @return boolean
      */
-    public function isMutable()
-    {
+    public function isMutable() {
         return $this instanceof FNMutable;
     }
 
@@ -464,8 +441,7 @@ trait FNDefaultObject
      * Returns the description of the current object.
      * @return FNString
      */
-    final public function description()
-    {
+    final public function description() {
         return s($this->__toString());
     }
 
@@ -473,8 +449,7 @@ trait FNDefaultObject
      * Returns the description of the current object.
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return '<' . $this::cls() . '>';
     }
 
@@ -484,8 +459,7 @@ trait FNDefaultObject
 
 }
 
-interface FNComparable
-{
+interface FNComparable {
     /**
      * Returns if both objects/values are equal
      * @arg mixed $value
@@ -495,25 +469,23 @@ interface FNComparable
     public function isEqualTo($value);
 }
 
-trait FNDefaultComparable
-{
+trait FNDefaultComparable {
     /**
      * Returns if both objects/values are equal
      * @arg mixed $value
      * @param $value
      * @return boolean
      */
-    public function isEqualTo($value)
-    {
-        if (!is_object($value)) return FALSE;
+    public function isEqualTo($value) {
+        if (!is_object($value))
+            return FALSE;
         if ($value instanceof Object && $this instanceof Object) {
             return $value::cls() == $this::cls();
         } else return get_class($value) == get_class($this);
     }
 }
 
-class FNObject implements Object, FNComparable
-{
+class FNObject implements Object, FNComparable {
     use FNDefaultObject;
     use FNDefaultComparable;
 }

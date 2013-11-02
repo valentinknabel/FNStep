@@ -8,10 +8,10 @@
 //
 
 namespace FNFoundation;
-use \Iterator;
 
-class FNArray extends FNContainer implements FNArrayAccess, Iterator
-{
+use Iterator;
+
+class FNArray extends FNContainer implements FNArrayAccess, Iterator {
     use FNContainerArrayAccess;
 
     private $position = 0;
@@ -22,8 +22,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @param $value
      * @return boolean
      */
-    public static function isValidValue($value)
-    {
+    public static function isValidValue($value) {
         return is_array($value);
     }
 
@@ -32,8 +31,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @param $value
      * @return mixed
      */
-    public static function convertValue($value)
-    {
+    public static function convertValue($value) {
         return carraya($value);
     }
 
@@ -42,8 +40,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return n(count($this->value()));
     }
 
@@ -52,8 +49,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return FNMutableArray:: initWith($this->value());
     }
 
@@ -61,8 +57,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return FNArray:: initWith($this->value());
     }
 
@@ -73,8 +68,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNArray
      */
     static function initWithList(/** @noinspection PhpUnusedParameterInspection */
-        Object $object1 = NULL)
-    {
+        Object $object1 = NULL) {
         return static::initWith(func_get_args());
     }
 
@@ -83,8 +77,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see Iterator::current()
      */
-    public function current()
-    {
+    public function current() {
         return $this->value()[$this->position];
     }
 
@@ -92,8 +85,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see Iterator::key()
      */
-    public function key()
-    {
+    public function key() {
         return $this->position;
     }
 
@@ -101,8 +93,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see Iterator::next()
      */
-    public function next()
-    {
+    public function next() {
         ++$this->position;
     }
 
@@ -110,8 +101,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see Iterator::rewind()
      */
-    public function rewind()
-    {
+    public function rewind() {
         $this->position = 0;
     }
 
@@ -119,8 +109,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see Iterator::valid()
      */
-    public function valid()
-    {
+    public function valid() {
         return isset($this->value()[$this->position]);
     }
 
@@ -129,21 +118,18 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see ArrayAccess::offsetExists()
      */
-    function offsetExists($offset)
-    {
+    function offsetExists($offset) {
         if (!($offset instanceof FNNumber))
             $offset = FNNumber::initWith($offset);
         if ($offset instanceof FNNumber)
-            return isset($this->value()[$offset->value()]);
-        else return false;
+            return isset($this->value()[$offset->value()]); else return false;
     }
 
     /**
      *(non-PHPdoc)
      * @see ArrayAccess::offsetGet()
      */
-    function offsetGet($offset)
-    {
+    function offsetGet($offset) {
         return $this->value()[cint($offset)];
     }
 
@@ -151,8 +137,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see ArrayAccess::offsetSet()
      */
-    function offsetSet($offset, $value)
-    {
+    function offsetSet($offset, $value) {
         if (!($offset instanceof FNNumber))
             $offset = FNNumber::initWith($offset);
         if ($offset instanceof FNNumber && $value instanceof object) {
@@ -166,8 +151,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      *(non-PHPdoc)
      * @see ArrayAccess::offsetUnset()
      */
-    function offsetUnset($offset)
-    {
+    function offsetUnset($offset) {
         if (!($offset instanceof FNNumber))
             $offset = FNNumber::initWith($offset);
         if ($offset instanceof FNContainer) {
@@ -185,11 +169,11 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNArray
      */
     function add(/** @noinspection PhpUnusedParameterInspection */
-        Object $object = NULL)
-    {
+        Object $object = NULL) {
         $value = $this->value();
         foreach (func_get_args() as $arg) {
-            if ($arg instanceof object) $value[] = $arg;
+            if ($arg instanceof object)
+                $value[] = $arg;
         }
         return $this->returnObjectWith($value);
     }
@@ -199,8 +183,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @param FNNumber $size
      * @return FNArray
      */
-    function chunk(FNNumber $size)
-    {
+    function chunk(FNNumber $size) {
         return $this->returnObjectWith(array_chunk($this->value(), $size->value()));
     }
 
@@ -209,8 +192,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @param FNArray $values
      * @return FNDictionary
      */
-    function combine(FNArray $values)
-    {
+    function combine(FNArray $values) {
         return FNDictionary::initWith(array_combine($this->value(), $values->value()));
     }
 
@@ -219,8 +201,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @param \FNFoundation\object|object $object $object
      * @return bool
      */
-    function containsObject(object $object)
-    {
+    function containsObject(object $object) {
         return in_array($object, $this->value());
     }
 
@@ -231,8 +212,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNSet
      */
     function difference(/** @noinspection PhpUnusedParameterInspection */
-        FNArray $array, FNArray $array1 = NULL /* FNArray infinite*/)
-    {
+        FNArray $array, FNArray $array1 = NULL /* FNArray infinite*/) {
         $param_array = array();
         foreach (func_get_args() as $value) {
             if ($value instanceof FNArray) {
@@ -249,8 +229,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNSet
      */
     function differenceAssociation(/** @noinspection PhpUnusedParameterInspection */
-        FNArray $array, FNArray $array1 = NULL /* FNArray infinite*/)
-    {
+        FNArray $array, FNArray $array1 = NULL /* FNArray infinite*/) {
         $param_array = array();
         foreach (func_get_args() as $value) {
             if ($value instanceof FNArray) {
@@ -267,8 +246,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNSet
      */
     function differenceIndexAssociation(/** @noinspection PhpUnusedParameterInspection */
-        FNArray $array, FNArray $array1 = NULL /* FNArray infinite*/)
-    {
+        FNArray $array, FNArray $array1 = NULL /* FNArray infinite*/) {
         $param_array = array();
         foreach (func_get_args() as $value) {
             if ($value instanceof FNArray) {
@@ -287,9 +265,9 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @param FNString $function
      * @return FNArray
      */
-    function filter(FNString $function)
-    {
-        if ($function) $function = $function->value();
+    function filter(FNString $function) {
+        if ($function)
+            $function = $function->value();
         /** @var $function string */
         return $this->returnObjectWith(array_filter($this->value(), $function));
     }
@@ -301,8 +279,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNArray
      */
     function mergeRecursive(/** @noinspection PhpUnusedParameterInspection */
-        FNArray $array, FNArray $array2 = NULL /*infinite arguments*/)
-    {
+        FNArray $array, FNArray $array2 = NULL /*infinite arguments*/) {
         $args = array($this->value());
         foreach (func_get_args() as $arg) {
             if ($arg instanceof FNArray)
@@ -318,8 +295,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
      * @return FNArray
      */
     function merge(/** @noinspection PhpUnusedParameterInspection */
-        FNArray $array, FNArray $array2 = NULL /*infinite arguments*/)
-    {
+        FNArray $array, FNArray $array2 = NULL /*infinite arguments*/) {
         $args = array($this->value());
         foreach (func_get_args() as $arg) {
             if ($arg instanceof FNArray)
@@ -330,8 +306,7 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator
 
 }
 
-class FNMutableArray extends FNArray implements FNMutableContainer
-{
+class FNMutableArray extends FNArray implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }
 

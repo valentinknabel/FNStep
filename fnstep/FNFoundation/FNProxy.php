@@ -23,9 +23,12 @@ class FNProxy extends FNObject {
     /**
      * This method is declared as protected to disallow the use of the new-operator outside of this class and its subclasses.
      */
-    protected function __construct($object = NULL)
-    {
+    protected function __construct($object = NULL) {
         $this->object = $object;
+    }
+
+    public static function initWith($object) {
+        return new static($object);
     }
 
     /**
@@ -38,8 +41,7 @@ class FNProxy extends FNObject {
      * @return mixed
      */
     public function unresolvedMethod(FNString $function, /** @noinspection PhpUnusedParameterInspection */
-                                     array $arguments)
-    {
+                                     array $arguments) {
         try {
             return con(call_user_func_array(array($this->object, $function->value()), c($arguments)));
         } catch (Exception $exception) {
@@ -54,10 +56,9 @@ class FNProxy extends FNObject {
      * @throws FNUnresolvedProperty
      * @return mixed
      */
-    public function unresolvedProperty(FNString $property)
-    {
+    public function unresolvedProperty(FNString $property) {
         try {
-            if(isset($this->object->{$property->value()}))
+            if (isset($this->object->{$property->value()}))
                 return con($this->object->{$property->value()});
             return con($this->callMethod($property));
         } catch (FNUnresolvedMethod $exception) {
@@ -74,12 +75,11 @@ class FNProxy extends FNObject {
      * @throws FNSetUnresolvedProperty
      * @return void
      */
-    public function setUnresolvedProperty(FNString $property, $value)
-    {
+    public function setUnresolvedProperty(FNString $property, $value) {
         $setter = s('set')->appendString($property->firstCharacterToUpperCase());
         /** @var $this Object */
         try {
-            if(isset($this->object->{$property->value()}))
+            if (isset($this->object->{$property->value()}))
                 $this->object->{$property->value()} = c($value);
             $this->callMethod($setter, $value);
         } catch (FNUnresolvedMethod $exception) {
@@ -93,8 +93,7 @@ class FNProxy extends FNObject {
      * @param $method
      * @return boolean
      */
-    public function respondsToMethod($method)
-    {
+    public function respondsToMethod($method) {
         return method_exists(isset($this) ? $this->object : static::cls(), cstring($method));
     }
 
@@ -104,9 +103,12 @@ class FNProxy extends FNObject {
      * @param $type
      * @return boolean
      */
-    public function isKindOf($type)
-    {
+    public function isKindOf($type) {
         return $this->object instanceof $type;
+    }
+
+    public static function objectClass(FNProxy $object) {
+        return get_class($object->object);
     }
 
     /**
@@ -115,8 +117,7 @@ class FNProxy extends FNObject {
      * @param $class
      * @return boolean
      */
-    public function isMemberOf($class)
-    {
+    public function isMemberOf($class) {
         return get_class($this->object) == cstring($class);
     }
 
@@ -124,8 +125,7 @@ class FNProxy extends FNObject {
      * Returns if the given object is mutable.
      * @return boolean
      */
-    public function isMutable()
-    {
+    public function isMutable() {
         return $this->object instanceof FNMutable;
     }
 
@@ -133,15 +133,13 @@ class FNProxy extends FNObject {
      * Returns the description of the current object.
      * @return string
      */
-    public function __toString()
-    {
-        return '<' . $this::cls() .'('.cstring($this->object).')'. '>';
+    public function __toString() {
+        return '<' . $this::cls() . '(' . cstring($this->object) . ')' . '>';
     }
 
     public function isEqualTo($value) {
-        if($value instanceof FNProxy) {
-            return static::objectOf($this) == static::objectOf($value)
-                || cstring(static::objectOf($this)) == cstring(static::objectOf($value));
+        if ($value instanceof FNProxy) {
+            return static::objectOf($this) == static::objectOf($value) || cstring(static::objectOf($this)) == cstring(static::objectOf($value));
         } else return c($this) == c($value);
     }
 
@@ -174,7 +172,12 @@ class FNProxy extends FNObject {
      */
     public function callMethodWithArray($method, array $array)
     {
-        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), carray($array));
+        return call_user_func_array(array($this->object, cstring($method)
+        ), array_slice(func_get_args(), 1, func_num_args() - 2));
+    }
+
+    function callInnerStaticMethodWithArray(FNString $method, array $array) {
+        return call_user_func_array(array($this->object, cstring($method)), $array);
     }
 
 }

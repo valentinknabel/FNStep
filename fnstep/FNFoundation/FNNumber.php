@@ -9,8 +9,7 @@
 
 namespace FNFoundation;
 
-class FNNumber extends FNContainer implements FNCountable
-{
+class FNNumber extends FNContainer implements FNCountable {
 
     const ROUND_HALF_UP = PHP_ROUND_HALF_UP;
     const ROUND_HALF_DOWN = PHP_ROUND_HALF_DOWN;
@@ -21,8 +20,7 @@ class FNNumber extends FNContainer implements FNCountable
      * Returns a mutable copy of the current object
      * @return FNContainer,FNMutable
      */
-    public function mutableCopy()
-    {
+    public function mutableCopy() {
         return FNNumber:: initWith($this->value());
     }
 
@@ -30,8 +28,7 @@ class FNNumber extends FNContainer implements FNCountable
      * Returns an immutable copy of the current object
      * @return FNContainer
      */
-    public function immutableCopy()
-    {
+    public function immutableCopy() {
         return FNMutableNumber:: initWith($this->value());
     }
 
@@ -40,8 +37,7 @@ class FNNumber extends FNContainer implements FNCountable
      * Returns the size.
      * @return FNNumber
      */
-    public function size()
-    {
+    public function size() {
         return n(cint($this->value()));
     }
 
@@ -50,8 +46,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://cn.php.net/manual/en/math.constants.php
      */
-    static function pi()
-    {
+    static function pi() {
         return static::initWith(pi());
     }
 
@@ -59,8 +54,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://cn.php.net/manual/en/math.constants.php
      */
-    static function e()
-    {
+    static function e() {
         return static::initWith(M_E);
     }
 
@@ -69,8 +63,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.rand.php
      */
-    static function initRandom()
-    {
+    static function initRandom() {
         return static::initWith(rand());
     }
 
@@ -80,8 +73,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @param FNNumber $maximum
      * @return \FNFoundation\FNValidatable|NULL $minimum <= random FNNumber <= $maximum@link http://de2.php.net/manual/en/function.rand.php
      */
-    static function initRandomBetween(FNNumber $minimum, FNNumber $maximum)
-    {
+    static function initRandomBetween(FNNumber $minimum, FNNumber $maximum) {
         return static::initWith(rand($minimum->value(), $maximum->value()));
     }
 
@@ -90,8 +82,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @param FNString $string
      * @return FNNumber
      */
-    static function initWithString(FNString $string)
-    {
+    static function initWithString(FNString $string) {
         return static::initWith($string->value());
     }
 
@@ -99,13 +90,11 @@ class FNNumber extends FNContainer implements FNCountable
      * @static zero
      * @return FNNumber 0
      */
-    static function zero()
-    {
+    static function zero() {
         return static::initWith(0);
     }
 
-    static function initIntegerWith($value, $round = FNNumber::ROUND_HALF_UP)
-    {
+    static function initIntegerWith($value, $round = FNNumber::ROUND_HALF_UP) {
         /** @noinspection PhpUndefinedMethodInspection */
         return static::initWith($value)->round(FNNumber::zero(), $round);
     }
@@ -117,12 +106,12 @@ class FNNumber extends FNContainer implements FNCountable
      * @return boolean
      *        true: string, int, float
      */
-    static function isValidValue($value)
-    {
+    static function isValidValue($value) {
         /* '1.0' ist auch numerisch! */
-        if ($value instanceof FNContainer) return true;
-        if (is_numeric($value)) return true;
-        else return false;
+        if ($value instanceof FNContainer)
+            return true;
+        if (is_numeric($value))
+            return true; else return false;
     }
 
     /**
@@ -130,8 +119,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @param mixed $value
      * @return mixed
      */
-    static function convertValue($value)
-    {
+    static function convertValue($value) {
         return cnumber($value);
     }
 
@@ -144,8 +132,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.deg2rad.php
      */
-    function radian()
-    {
+    function radian() {
         return $this->returnObjectWith(deg2rad($this->value()));
     }
 
@@ -154,8 +141,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.rad2deg.php
      */
-    function degree()
-    {
+    function degree() {
         return $this->returnObjectWith(rad2deg($this->value()));
     }
 
@@ -167,8 +153,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @link http://de2.php.net/manual/en/function.hypot.php
      *        Calculates the length of the hypotenuse of a right-angle triangle
      */
-    function hypotenuse(FNNumber $side)
-    {
+    function hypotenuse(FNNumber $side) {
         return $this->returnObjectWith(hypot($this->value(), $side->value()));
     }
 
@@ -178,8 +163,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @link http://de2.php.net/manual/en/function.sin.php
      */
     //sin,cos,tan
-    function sine()
-    {
+    function sine() {
         return $this->returnObjectWith(sin($this->value()));
     }
 
@@ -188,8 +172,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.cos.php
      */
-    function cosine()
-    {
+    function cosine() {
         return $this->returnObjectWith(cos($this->value()));
     }
 
@@ -198,8 +181,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.tan.php
      */
-    function tangent()
-    {
+    function tangent() {
         return $this->returnObjectWith(tan($this->value()));
     }
 
@@ -209,8 +191,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.sinh.php
      */
-    function hyperbolicSine()
-    {
+    function hyperbolicSine() {
         return $this->returnObjectWith(sinh($this->value()));
     }
 
@@ -219,8 +200,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.cosh.php
      */
-    function hyperbolicCosine()
-    {
+    function hyperbolicCosine() {
         return $this->returnObjectWith(cosh($this->value()));
     }
 
@@ -229,8 +209,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.tanh.php
      */
-    function hyperbolicTangent()
-    {
+    function hyperbolicTangent() {
         return $this->returnObjectWith(tanh($this->value()));
     }
 
@@ -240,8 +219,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.asin.php
      */
-    function arcSine()
-    {
+    function arcSine() {
         return $this->returnObjectWith(asin($this->value()));
     }
 
@@ -250,8 +228,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.acos.php
      */
-    function arcCosine()
-    {
+    function arcCosine() {
         return $this->returnObjectWith(acos($this->value()));
     }
 
@@ -260,8 +237,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.atan.php
      */
-    function arcTangent()
-    {
+    function arcTangent() {
         return $this->returnObjectWith(atan($this->value()));
     }
 
@@ -271,8 +247,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.atan2.php
      */
-    function arcDevidedTangent(FNNumber $divisor)
-    {
+    function arcDevidedTangent(FNNumber $divisor) {
         return $this->returnObjectWith(atan2($this->value(), $divisor->value()));
     }
 
@@ -282,8 +257,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.asinh.php
      */
-    function arcHyperbolicSine()
-    {
+    function arcHyperbolicSine() {
         return $this->returnObjectWith(asinh($this->value()));
     }
 
@@ -292,8 +266,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.acosh.php
      */
-    function arcHyperbolicCosine()
-    {
+    function arcHyperbolicCosine() {
         return $this->returnObjectWith(acosh($this->value()));
     }
 
@@ -302,19 +275,17 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.atanh.php
      */
-    function arcHyperbolicTangent()
-    {
+    function arcHyperbolicTangent() {
         return $this->returnObjectWith(atanh($this->value()));
     }
 
-##round
+    ##round
     /**
      * @method ceil
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.ceil.php
      */
-    function ceil()
-    {
+    function ceil() {
         return $this->returnObjectWith((int)ceil($this->value()));
     }
 
@@ -323,8 +294,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.floor.php
      */
-    function floor()
-    {
+    function floor() {
         return $this->returnObjectWith((int)floor($this->value()));
     }
 
@@ -336,20 +306,19 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.round.php
      */
-    function round(FNNumber $precision = NULL, $mode = FNNumber::ROUND_HALF_UP)
-    {
-        if (!$precision) $precision = FNNumber::zero();
+    function round(FNNumber $precision = NULL, $mode = FNNumber::ROUND_HALF_UP) {
+        if (!$precision)
+            $precision = FNNumber::zero();
         return $this->returnObjectWith(round($this->value(), $precision->value(), $mode));
     }
 
-##string numbers
+    ##string numbers
     /**
      * @method binaryString
      * @return FNString
      * @link http://de2.php.net/manual/en/function.decbin.php
      */
-    function binaryString()
-    {
+    function binaryString() {
         return FNString::initWith(decbin($this->value()));
     }
 
@@ -358,8 +327,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNString
      * @link http://de2.php.net/manual/en/function.dechex.php
      */
-    function hexadecimalString()
-    {
+    function hexadecimalString() {
         return FNString::initWith(dechex($this->value()));
     }
 
@@ -368,8 +336,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNString
      * @link http://de2.php.net/manual/en/function.deoct.php
      */
-    function octalString()
-    {
+    function octalString() {
         return FNString::initWith(decoct($this->value()));
     }
 
@@ -377,19 +344,17 @@ class FNNumber extends FNContainer implements FNCountable
      * @method decimalString
      * @return FNString
      */
-    function decimalString()
-    {
+    function decimalString() {
         return FNString::initWith((string)$this->value());
     }
 
-##calculations
+    ##calculations
     /**
      * @method absolute
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.abs.php
      */
-    function absolute()
-    {
+    function absolute() {
         return $this->returnObjectWith(abs($this->value()));
     }
 
@@ -398,8 +363,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @param FNNumber $addend
      * @return FNNumber
      */
-    function sum(FNNumber $addend)
-    {
+    function sum(FNNumber $addend) {
         return $this->returnObjectWith($this->value() + $addend->value());
     }
 
@@ -408,8 +372,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @param FNNumber $subtrahend
      * @return FNNumber
      */
-    function difference(FNNumber $subtrahend)
-    {
+    function difference(FNNumber $subtrahend) {
         return $this->returnObjectWith($this->value() - $subtrahend->value());
     }
 
@@ -418,8 +381,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @param FNNumber $factor
      * @return FNNumber
      */
-    function product(FNNumber $factor)
-    {
+    function product(FNNumber $factor) {
         return $this->returnObjectWith($this->value() * $factor->value());
     }
 
@@ -428,10 +390,9 @@ class FNNumber extends FNContainer implements FNCountable
      * @param FNNumber $divisor
      * @return FNNumber or false
      */
-    function quotient(FNNumber $divisor)
-    {
-        if ($divisor->value() == 0) return false;
-        else return $this->returnObjectWith($this->value() / $divisor->value());
+    function quotient(FNNumber $divisor) {
+        if ($divisor->value() == 0)
+            return false; else return $this->returnObjectWith($this->value() / $divisor->value());
     }
 
     /**
@@ -442,8 +403,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @link http://de2.php.net/manual/en/function.power.php
      */
 
-    function absoluteDifference(FNNumber $subtrahend)
-    { //@MODIFIED - D of difference tall
+    function absoluteDifference(FNNumber $subtrahend) { //@MODIFIED - D of difference tall
         return $this->returnObjectWith(abs($this->value() - $subtrahend->value()));
     }
 
@@ -455,8 +415,7 @@ class FNNumber extends FNContainer implements FNCountable
      *
      * @return FNNumber
      */
-    public function increase()
-    {
+    public function increase() {
         return $this->returnObjectWith($this->sum(n(1)));
     }
 
@@ -467,15 +426,13 @@ class FNNumber extends FNContainer implements FNCountable
      *
      * @return FNNumber
      */
-    public function decrease()
-    {
+    public function decrease() {
         return $this->returnObjectWith($this->difference(n(1)));
     }
 
     //@MODEND
 
-    function power(FNNumber $exponent)
-    {
+    function power(FNNumber $exponent) {
         return $this->returnObjectWith(pow($this->value(), $exponent->value()));
     }
 
@@ -484,8 +441,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.sqrt.php
      */
-    function squareRoot()
-    {
+    function squareRoot() {
         return $this->returnObjectWith(sqrt($this->value()));
     }
 
@@ -494,8 +450,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.exp10.php
      */
-    function exponentiate10()
-    {
+    function exponentiate10() {
         return $this->returnObjectWith(pow($this->value(), 10));
     }
 
@@ -505,8 +460,7 @@ class FNNumber extends FNContainer implements FNCountable
      * FNNumber::e() is the base
      * @link http://de2.php.net/manual/en/function.exp.php
      */
-    function exponentiateE()
-    {
+    function exponentiateE() {
         return $this->returnObjectWith(exp($this->value()));
     }
 
@@ -515,8 +469,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.expm1.php
      */
-    function exponentiateEMinus1()
-    {
+    function exponentiateEMinus1() {
         return $this->returnObjectWith(expm1($this->value()));
     }
 
@@ -525,8 +478,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.log10.php
      */
-    function logarithm10()
-    {
+    function logarithm10() {
         return $this->returnObjectWith(log10($this->value()));
     }
 
@@ -535,8 +487,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.log.php
      */
-    function logarithm2()
-    {
+    function logarithm2() {
         return $this->returnObjectWith(log($this->value(), 2));
     }
 
@@ -545,8 +496,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.log1p.php
      */
-    function logarithmEPlus1()
-    {
+    function logarithmEPlus1() {
         return $this->returnObjectWith(log1p($this->value()));
     }
 
@@ -555,8 +505,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.log.php
      */
-    function logarithmE()
-    {
+    function logarithmE() {
         return $this->returnObjectWith(log($this->value()));
     }
 
@@ -566,12 +515,11 @@ class FNNumber extends FNContainer implements FNCountable
      * @return FNNumber
      * @link http://de2.php.net/manual/en/function.log.php
      */
-    function logarithmX(FNNumber $base)
-    {
+    function logarithmX(FNNumber $base) {
         return $this->returnObjectWith(log($this->value(), $base->value()));
     }
 
-##conditions
+    ##conditions
     /**
      * @method modulo
      * @param FNNumber $divisor
@@ -579,8 +527,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @example FNNumber::initWith(10)->modulo(FNNumber::initWith(6)) is FNNumber 4
      * @link http://de2.php.net/manual/en/function.mod.php
      */
-    function modulo(FNNumber $divisor)
-    {
+    function modulo(FNNumber $divisor) {
         return $this->returnObjectWith(fmod($this->value(), $divisor->value()));
     }
 
@@ -591,8 +538,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @example FNNumber::e() is finite
      * @link http://de2.php.net/manual/en/function.is-finite.php
      */
-    function isFinite()
-    {
+    function isFinite() {
         return is_finite($this->value());
     }
 
@@ -603,8 +549,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @example FNNumber::initWith(1)->division(FNNumber::zero()) is infinite
      * @link http://de2.php.net/manual/en/function.is-infinite.php
      */
-    function isInfinite()
-    {
+    function isInfinite() {
         return is_infinite($this->value());
     }
 
@@ -615,8 +560,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @example ::cosine(FNNumber::initWith(1.1)) == NaN
      * @link http://de2.php.net/manual/en/function.is-nan.php
      */
-    function isNotANumber()
-    {
+    function isNotANumber() {
         return is_nan($this->value());
     }
 
@@ -626,8 +570,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return boolean
      *        true if $this is less
      */
-    function isLess(FNNumber $number)
-    {
+    function isLess(FNNumber $number) {
         return $this->value() < $number->value();
     }
 
@@ -637,8 +580,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return boolean
      *        true if $number is greater
      */
-    function isLessOrEqual(FNNumber $number)
-    {
+    function isLessOrEqual(FNNumber $number) {
         return $this->value() <= $number->value();
     }
 
@@ -648,8 +590,7 @@ class FNNumber extends FNContainer implements FNCountable
      * @return boolean
      *        true if $this is greater
      */
-    function isGreater(FNNumber $number)
-    {
+    function isGreater(FNNumber $number) {
         return $this->value() > $number->value();
     }
 
@@ -659,14 +600,12 @@ class FNNumber extends FNContainer implements FNCountable
      * @return boolean
      *        true if $number is less
      */
-    function isGreaterOrEqual(FNNumber $number)
-    {
+    function isGreaterOrEqual(FNNumber $number) {
         return $this->value() >= $number->value();
     }
 
 }
 
-class FNMutableNumber extends FNNumber implements FNMutableContainer
-{
+class FNMutableNumber extends FNNumber implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }
