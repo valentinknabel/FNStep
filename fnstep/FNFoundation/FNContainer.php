@@ -9,6 +9,10 @@
 
 namespace FNFoundation;
 
+/**
+ * Class FNMutableContainer
+ * @package FNFoundation
+ */
 interface FNMutableContainer extends FNMutable {
     /**
      * Sets the value of the container.
@@ -19,6 +23,10 @@ interface FNMutableContainer extends FNMutable {
     public function setValue($value);
 }
 
+/**
+ * Class FNDefaultMutableContainer
+ * @package FNFoundation
+ */
 trait FNDefaultMutableContainer {
     /**
      * Sets the value of the container.
@@ -32,6 +40,10 @@ trait FNDefaultMutableContainer {
     }
 }
 
+/**
+ * Class FNContainer
+ * @package FNFoundation
+ */
 abstract class FNContainer extends FNObject implements FNComparable, FNCountable, FNValidatable {
     use FNDefaultCountable;
 
@@ -41,6 +53,9 @@ abstract class FNContainer extends FNObject implements FNComparable, FNCountable
      */
     private $_value;
 
+    /**
+     * @param null $value
+     */
     protected function __construct($value = NULL) {
         $this->_value = static::convertValue($value);
     }

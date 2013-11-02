@@ -11,23 +11,65 @@ namespace FNFoundation;
 
 use ArrayAccess;
 
+/**
+ * Class FNArrayAccess
+ * @package FNFoundation
+ */
 interface FNArrayAccess extends ArrayAccess {
+    /**
+     * @param FNIdentifiable $id
+     * @return mixed
+     */
     function idExists(FNIdentifiable $id);
 
+    /**
+     * @param FNIdentifiable $id
+     * @return mixed
+     */
     function unsetId(FNIdentifiable $id);
 
+    /**
+     * @param FNIdentifiable $id
+     * @param object $value
+     * @return mixed
+     */
     function setValueForId(FNIdentifiable $id, object $value);
 
+    /**
+     * @param FNIdentifiable $id
+     * @return mixed
+     */
     function valueForId(FNIdentifiable $id);
 }
 
+/**
+ * Class FNContainerArrayAccess
+ * @package FNFoundation
+ */
 trait FNContainerArrayAccess {
+    /**
+     * @param $offset
+     * @return mixed
+     */
     abstract function offsetExists($offset);
 
+    /**
+     * @param $offset
+     * @return mixed
+     */
     abstract function offsetUnset($offset);
 
+    /**
+     * @param $offset
+     * @param $value
+     * @return mixed
+     */
     abstract function offsetSet($offset, $value);
 
+    /**
+     * @param $offset
+     * @return mixed
+     */
     abstract function offsetGet($offset);
 
     /**
@@ -83,6 +125,10 @@ trait FNContainerArrayAccess {
 
 }
 
+/**
+ * Class FNDefaultTraversable
+ * @package FNFoundation
+ */
 trait FNDefaultTraversable {
 
 }

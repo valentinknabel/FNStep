@@ -11,9 +11,16 @@ namespace FNFoundation;
 
 use Iterator;
 
+/**
+ * Class FNArray
+ * @package FNFoundation
+ */
 class FNArray extends FNContainer implements FNArrayAccess, Iterator {
     use FNContainerArrayAccess;
 
+    /**
+     * @var int
+     */
     private $position = 0;
 
     //!FNValidatable
@@ -306,6 +313,10 @@ class FNArray extends FNContainer implements FNArrayAccess, Iterator {
 
 }
 
+/**
+ * Class FNMutableArray
+ * @package FNFoundation
+ */
 class FNMutableArray extends FNArray implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }

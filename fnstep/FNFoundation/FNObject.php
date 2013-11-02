@@ -9,9 +9,17 @@
 
 namespace FNFoundation;
 
+/**
+ * Class FNMutable
+ * @package FNFoundation
+ */
 interface FNMutable {
 }
 
+/**
+ * Class Object
+ * @package FNFoundation
+ */
 interface Object {
     /**
      * This method is declared as protected to disallow the use of the new-operator outside of this class and its subclasses.
@@ -193,9 +201,16 @@ interface Object {
      */
     public function __toString();
 
+    /**
+     * @return mixed
+     */
     public function isProxy();
 }
 
+/**
+ * Class FNDefaultObject
+ * @package FNFoundation
+ */
 trait FNDefaultObject {
     //!additions
     /**
@@ -453,12 +468,19 @@ trait FNDefaultObject {
         return '<' . $this::cls() . '>';
     }
 
+    /**
+     * @return bool
+     */
     public function isProxy() {
         return $this instanceof FNProxy;
     }
 
 }
 
+/**
+ * Class FNComparable
+ * @package FNFoundation
+ */
 interface FNComparable {
     /**
      * Returns if both objects/values are equal
@@ -469,6 +491,10 @@ interface FNComparable {
     public function isEqualTo($value);
 }
 
+/**
+ * Class FNDefaultComparable
+ * @package FNFoundation
+ */
 trait FNDefaultComparable {
     /**
      * Returns if both objects/values are equal
@@ -485,6 +511,10 @@ trait FNDefaultComparable {
     }
 }
 
+/**
+ * Class FNObject
+ * @package FNFoundation
+ */
 class FNObject implements Object, FNComparable {
     use FNDefaultObject;
     use FNDefaultComparable;

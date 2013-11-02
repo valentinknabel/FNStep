@@ -12,9 +12,20 @@ namespace FNFoundation;
 
 use Exception;
 
+/**
+ * Class FNProxy
+ * @package FNFoundation
+ */
 class FNProxy extends FNObject {
+    /**
+     * @var null
+     */
     private $object;
 
+    /**
+     * @param FNProxy $proxy
+     * @return null
+     */
     public static function objectOf(FNProxy $proxy) {
         return $proxy->object;
     }
@@ -27,6 +38,10 @@ class FNProxy extends FNObject {
         $this->object = $object;
     }
 
+    /**
+     * @param $object
+     * @return static
+     */
     public static function initWith($object) {
         return new static($object);
     }
@@ -107,6 +122,10 @@ class FNProxy extends FNObject {
         return $this->object instanceof $type;
     }
 
+    /**
+     * @param FNProxy $object
+     * @return string
+     */
     public static function objectClass(FNProxy $object) {
         return get_class($object->object);
     }
@@ -137,12 +156,21 @@ class FNProxy extends FNObject {
         return '<' . $this::cls() . '(' . cstring($this->object) . ')' . '>';
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     public function isEqualTo($value) {
         if ($value instanceof FNProxy) {
             return static::objectOf($this) == static::objectOf($value) || cstring(static::objectOf($this)) == cstring(static::objectOf($value));
         } else return c($this) == c($value);
     }
 
+    /**
+     * @param FNString $method
+     * @param null $list
+     * @return mixed
+     */
     function callInnerStaticMethod(FNString $method, /** @noinspection PhpUnusedParameterInspection */
                                    $list = NULL) {
         return call_user_func_array(array(get_class($this->object), $method->value()), carray(array_slice(func_get_args(), 1)));
@@ -176,6 +204,11 @@ class FNProxy extends FNObject {
         ), array_slice(func_get_args(), 1, func_num_args() - 2));
     }
 
+    /**
+     * @param FNString $method
+     * @param array $array
+     * @return mixed
+     */
     function callInnerStaticMethodWithArray(FNString $method, array $array) {
         return call_user_func_array(array($this->object, cstring($method)), $array);
     }

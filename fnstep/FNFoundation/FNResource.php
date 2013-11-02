@@ -10,8 +10,16 @@
 namespace FNFoundation;
 
 
+/**
+ * Class FNResource
+ * @package FNFoundation
+ */
 class FNResource extends FNContainer {
 
+    /**
+     * @param $value
+     * @return bool
+     */
     public static function isValidValue($value) {
         return is_resource($value);
     }
@@ -40,12 +48,19 @@ class FNResource extends FNContainer {
         return n($this->value());
     }
 
+    /**
+     * @return FNString
+     */
     public function type() {
         return s(get_resource_type($this->value()));
     }
 
 }
 
+/**
+ * Class FNMutableResource
+ * @package FNFoundation
+ */
 class FNMutableResource extends FNResource {
     use FNDefaultMutableContainer;
 }

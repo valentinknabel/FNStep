@@ -9,11 +9,20 @@
 
 namespace FNFoundation;
 
-
+/**
+ * Class FNDictionary
+ * @package FNFoundation
+ */
 class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
     use FNContainerArrayAccess;
 
+    /**
+     * @var array
+     */
     private $tempKeys;
+    /**
+     * @var int
+     */
     private $position;
 
     /**
@@ -40,10 +49,18 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
         return n(count($this->value()));
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     public static function isValidValue($value) {
         return is_array($value) || is_null($value);
     }
 
+    /**
+     * @param $value
+     * @return array
+     */
     static function convertValue($value) {
         if (is_array($value)) {
             $helpArr = array();
@@ -57,6 +74,10 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
             return array(); else return array();
     }
 
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
     function offsetExists($offset) {
         if (!($offset instanceof FNNumber))
             $offset = FNNumber::initWith($offset);
@@ -64,10 +85,19 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
             return isset($this->value()[$offset->value()]); else return false;
     }
 
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
     function offsetGet($offset) {
         return $this->value()[cint($offset)];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     * @return bool|FNContainer
+     */
     function offsetSet($offset, $value) {
         if (!($offset instanceof FNString))
             $offset = FNString::initWith($offset);
@@ -78,6 +108,10 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
         } else return false;
     }
 
+    /**
+     * @param mixed $offset
+     * @return bool|FNContainer
+     */
     function offsetUnset($offset) {
         if (!($offset instanceof FNString))
             $offset = FNString::initWith($offset);
@@ -141,31 +175,57 @@ class FNDictionary extends FNContainer implements FNArrayAccess, \Iterator {
         $this->tempKeys = array_keys($this->value());
     }
 
+    /**
+     * @param FNIdentifiable $id
+     * @return bool
+     */
     function idExists(FNIdentifiable $id) {
         return isset($this->value()[$id->genericIdentifier()->id()->value()]);
     }
 
+    /**
+     * @param FNIdentifiable $id
+     */
     function unsetId(FNIdentifiable $id) {
         unset($this->value()[$id->genericIdentifier()->id()->value()]);
     }
 
+    /**
+     * @param FNIdentifiable $id
+     * @param \FNFoundation\Object $value
+     */
     function setValueForId(FNIdentifiable $id, Object $value) {
         $this->value()[$id->genericIdentifier()->id()->value()] = $value;
     }
 
+    /**
+     * @param FNIdentifiable $id
+     * @return mixed
+     */
     function valueForId(FNIdentifiable $id) {
         return $this->value()[$id->genericIdentifier()->id()->value()];
     }
 
+    /**
+     * @param FNDictionary $dictionary
+     */
     function addDictionary(FNDictionary $dictionary) {
 
     }
 
+    /**
+     * @param FNArray $values
+     * @param FNArray $keys
+     */
     function addValuesWithKeys(FNArray $values, FNArray $keys) {
 
     }
 }
 
+/**
+ * Class FNMutableDictionary
+ * @package FNFoundation
+ */
 class FNMutableDictionary extends FNDictionary implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }

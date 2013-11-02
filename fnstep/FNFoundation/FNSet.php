@@ -9,6 +9,10 @@
 
 namespace FNFoundation;
 
+/**
+ * Class FNSet
+ * @package FNFoundation
+ */
 class FNSet extends FNContainer {
     //equal for FNContainer means -isEqualTo
     //equal for primitives means ==
@@ -298,6 +302,10 @@ class FNSet extends FNContainer {
 
 }
 
+/**
+ * Class FNMutableSet
+ * @package FNFoundation
+ */
 class FNMutableSet extends FNSet implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }

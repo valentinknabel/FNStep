@@ -7,8 +7,6 @@
 //!Copyright (c) 2013 Valentin Knabel. All rights reserved.
 //
 
-use FNFoundation\FNProxy;
-
 date_default_timezone_set('Europe/Berlin');
 
 require('const.php');
@@ -28,4 +26,3 @@ require('FNFoundation/FNSet.php');
 require('FNFoundation/FNArray.php');
 require('FNFoundation/FNDictionary.php');
 require('FNFoundation/FNProxy.php');
-
