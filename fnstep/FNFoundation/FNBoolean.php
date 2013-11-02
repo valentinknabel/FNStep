@@ -9,6 +9,10 @@
 
 namespace FNFoundation;
 
+/**
+ * Class FNBoolean
+ * @package FNFoundation
+ */
 class FNBoolean extends FNContainer {
     /**
      * Returns a mutable copy of the current object
@@ -73,6 +77,10 @@ class FNBoolean extends FNContainer {
 
 }
 
+/**
+ * Class FNMutableBoolean
+ * @package FNFoundation
+ */
 class FNMutableBoolean extends FNBoolean implements FNMutableContainer {
     use FNDefaultMutableContainer;
 }

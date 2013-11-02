@@ -39,6 +39,9 @@ define('OBJECT_TYPE', 'object');
 //!––––––––––––––––––––––––––––––––
 //!functions
 
+/**
+ * @param string $message
+ */
 function FNLog($message = '') {
     if (DEBUG)
         echo '[' . date("Y-m-d H:i:s") . ' ' . basename($_SERVER["SCRIPT_FILENAME"], '.php') . '] ' . $message . PHP_EOL . (HTML_DISABLED ?
@@ -65,6 +68,11 @@ function con($value) {
     return FNContainer::initWith($value);
 }
 
+/**
+ * @param $value
+ * @param bool $strict
+ * @return array|\FNFoundation\FNGenericIdentifier|mixed|null|string
+ */
 function c($value, $strict = NO) {
     switch (gettype($value)) {
         case OBJECT_TYPE:
@@ -81,9 +89,10 @@ function c($value, $strict = NO) {
             if ($value instanceof FNProxy)
                 return $value::objectOf($value);
             if ($value instanceof FNIdentifiable)
-                return $value->genericIdentifier();
+                return $value->genericIdentifier()->id()->value();
             if ($strict)
                 return cstring($value);
+            break;
         case ARRAY_TYPE:
             $array = array();
             foreach($value as $key => $val) {

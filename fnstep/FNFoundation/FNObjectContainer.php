@@ -14,6 +14,10 @@ namespace FNFoundation;
  * This class is only for containing objects, not for using them. Use FNProxy in order to call contained methods.
  * @package FNFoundation
  */
+/**
+ * Class FNObjectContainer
+ * @package FNFoundation
+ */
 class FNObjectContainer extends FNContainer {
 
     /**
@@ -40,6 +44,10 @@ class FNObjectContainer extends FNContainer {
         return n(cint($this->value()));
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     public static function isValidValue($value) {
         return is_object($value);
     }
@@ -47,6 +55,10 @@ class FNObjectContainer extends FNContainer {
 
 }
 
+/**
+ * Class FNMutableObjectContainer
+ * @package FNFoundation
+ */
 class FNMutableObjectContainer extends FNObjectContainer {
     use FNDefaultMutableContainer;
 }

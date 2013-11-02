@@ -11,6 +11,10 @@ namespace FNFoundation;
 
 use Countable;
 
+/**
+ * Class FNCountable
+ * @package FNFoundation
+ */
 interface FNCountable extends Countable {
     /**
      * Implement size instead.
@@ -25,6 +29,10 @@ interface FNCountable extends Countable {
     public function size();
 }
 
+/**
+ * Class FNDefaultCountable
+ * @package FNFoundation
+ */
 trait FNDefaultCountable {
     /**
      * Implement size instead.
@@ -41,6 +49,10 @@ trait FNDefaultCountable {
     abstract public function size();
 }
 
+/**
+ * Class FNValidatable
+ * @package FNFoundation
+ */
 interface FNValidatable {
     /**
      * Returns an instance.
@@ -64,6 +76,10 @@ interface FNValidatable {
     public static function isValidValue($value);
 }
 
+/**
+ * Class FNDefaultValidatable
+ * @package FNFoundation
+ */
 trait FNDefaultValidatable {
     /**
      * Returns an instance.
@@ -98,6 +114,10 @@ trait FNDefaultValidatable {
     }
 }
 
+/**
+ * Class FNIdentifiable
+ * @package FNFoundation
+ */
 interface FNIdentifiable {
     /**
      * Returns the id.
@@ -187,6 +207,10 @@ trait FNDefaultIdentifiable {
     }
 }
 
+/**
+ * Class FNIdentifier
+ * @package FNFoundation
+ */
 abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValidatable, FNComparable, FNCountable {
     use FNDefaultIdentifiable, FNDefaultValidatable, FNDefaultCountable;
 
@@ -196,6 +220,9 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
      */
     private $_id;
 
+    /**
+     * @param $id
+     */
     protected function __construct($id) {
         $this->_id = static::convertValue($id);
     }
@@ -259,6 +286,10 @@ abstract class FNIdentifier extends FNObject implements FNIdentifiable, FNValida
 
 }
 
+/**
+ * Class FNGenericIdentifier
+ * @package FNFoundation
+ */
 class FNGenericIdentifier extends FNIdentifier {
     //!FNValidatable
     /**
@@ -280,6 +311,10 @@ class FNGenericIdentifier extends FNIdentifier {
     }
 }
 
+/**
+ * Class FNNumericIdentifier
+ * @package FNFoundation
+ */
 class FNNumericIdentifier extends FNIdentifier {
     //!FNValidatable
     /**
@@ -301,6 +336,10 @@ class FNNumericIdentifier extends FNIdentifier {
     }
 }
 
+/**
+ * Class FNCommonIdentifier
+ * @package FNFoundation
+ */
 class FNCommonIdentifier extends FNIdentifier {
     //!FNValidatable
     /**
