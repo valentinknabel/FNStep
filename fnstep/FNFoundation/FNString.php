@@ -299,12 +299,12 @@ class FNString extends FNContainer {
     }
 
     /**
-     * @method substringSinceOccurence
+     * @method substringSinceOccurrence
      * @param FNString $needle
      * @param boolean $before
      * @return FNString
      */
-    function substringSinceOccurence(FNString $needle, $before = FALSE) {
+    function substringSinceOccurrence(FNString $needle, $before = FALSE) {
         return $this->returnObjectWith(mb_stristr($this->value(), $needle->value(), $before, FNString::STANDARD_ENCODING));
     }
 
@@ -530,44 +530,27 @@ class FNString extends FNContainer {
 
     /**
      * @param FNString $pattern
+     * @return bool
      */
     function matches(FNString $pattern) {
-
+        return mb_ereg_match($this->value(), $pattern->value());
     }
 
     ##Security
-    /**
-     * @method levenshtein
-     * @param FNString $data
-     * @return FNNumber
-     */
-    function levenshtein(FNString $data) {
-        return FNNumber::initWith(levenshtein($this->value(), $data->value()));
+
+    function sha256() {
+        return $this->returnObjectWith(hash('sha256', $this->value()));
     }
 
-    /**
-     * @method ord
-     * @return FNNumber
-     */
-    function ord() {
-        $char = $this->charWithIndex(FNNumber::zero());
-        $i = 0;
-        $number = '';
-        while (isset($char{$i})) {
-            $number .= ord($char{$i});
-            ++$i;
-        }
-        return FNNumber::initWith($number);
+    function sha384() {
+        return $this->returnObjectWith(hash('sha384', $this->value()));
     }
 
-    /**
-     * @method similarity
-     * @param FNString $data
-     * @return FNNumber
-     */
-    function similarity(FNString $data) {
-        return FNNumber::initWith(similar_text($this->value(), $data->value()));
+    function sha512() {
+        return $this->returnObjectWith(hash('sha512', $this->value()));
     }
+
+    //TODO add AES-128, AES-192, AES-256,
 
     ##manipulation
     /**
@@ -586,24 +569,6 @@ class FNString extends FNContainer {
      */
     function addCSlashes(FNString $charList) {
         return $this->returnObjectWith(addCSlashes($this->value(), $charList->value()));
-    }
-
-    /**
-     * @method reverseHebrew
-     * @param FNNumber $maxChars
-     * @return FNString
-     */
-    function reverseHebrew(FNNumber $maxChars) {
-        return $this->returnObjectWith(hebrev($this->value(), $maxChars->value()));
-    }
-
-    /**
-     * @method reverseHebrewBr
-     * @param FNNumber $maxChars
-     * @return FNString
-     */
-    function reverseHebrewBr(FNNumber $maxChars) {
-        return $this->returnObjectWith(hebrevc($this->value(), $maxChars->value()));
     }
 
     /**
@@ -714,12 +679,12 @@ class FNString extends FNContainer {
     }
 
     /**
-     * @method replaceSubstrings
+     * @method replaceStringBefore
      * @param FNString $search
      * @param FNString $to
      * @return FNString
      */
-    function replaceSubstrings(FNString $search, FNString $to) {
+    function replaceStringBefore(FNString $search, FNString $to) {
         return $this->returnObjectWith(strtr($this->value(), $search->value(), $to->value()));
     }
 
@@ -802,13 +767,13 @@ class FNString extends FNContainer {
     }
 
     /**
-     * @method replace
+     * @method replaceString
      * @param FNString $search
      * @param FNString $replace
      * @param FNNumber &$count
      * @return FNString
      */
-    function replace(FNString $search, FNString $replace, &$count = null) {
+    function replaceString(FNString $search, FNString $replace, &$count = null) {
         $temp = NULL;
         $return = $this->returnObjectWith(str_replace($search->value(), $replace->value(), $this->value(), $temp)); //@MODIFIED $count instead of &$count(Deprecated)
         $count = FNNumber::initWith($temp);
@@ -867,12 +832,12 @@ class FNString extends FNContainer {
     }
 
     /**
-     * @method positionOfLastInsesitiveOccurence
+     * @method positionOfLastInsensitiveOccurrence
      * @param FNString $data
      * @param FNNumber $offset
      * @return FNNumber
      */
-    function positionOfLastInsensitiveOccurence(FNString $data, FNNumber $offset = NULL) {
+    function positionOfLastInsensitiveOccurrence(FNString $data, FNNumber $offset = NULL) {
         if ($offset === NULL)
             $offset = FNNumber::initWith(0);
         return $this->returnObjectWith(strripos($this->value(), $data->value(), $offset->value()));
@@ -932,26 +897,6 @@ class FNString extends FNContainer {
     function stringWidth() {
         return FNNumber::initWith(mb_strwidth($this->value(), FNString::STANDARD_ENCODING));
     }
-
-    /**
-     * @method metaphone
-     * @param FNNumber $data
-     * @return FNString
-     */
-    function metaphone(FNNumber $data = NULL) {
-        if ($data === NULL)
-            $data = FNNumber::initWith(0);
-        return $this->returnObjectWith(metaphone($this->value(), $data->value()));
-    }
-
-    /**
-     * @method soundex
-     * @return FNString
-     */
-    function soundex() {
-        return $this->returnObjectWith(soundex($this->value()));
-    }
-
 
     /**
      * @param FNContainer $container
