@@ -31,6 +31,22 @@ class FNClass extends FNObject implements FNIdentifiable {
     }
 
     /**
+     * @param $string
+     * @return static
+     */
+    public static function initWith($string) {
+        return new static($string);
+    }
+
+    /**
+     * @param FNString $string
+     * @return static
+     */
+    public static function initWithString(FNString $string) {
+        return new static($string);
+    }
+
+    /**
      * Returns the id.
      * @return FNString|FNNumber|string|int
      */
@@ -106,5 +122,13 @@ class FNClass extends FNObject implements FNIdentifiable {
         }
     }
 
+
+    /**
+     * @return FNClass
+     */
+    public function superClass()
+    {
+        return FNClass::initWith(get_parent_class(cstring($this->name())));
+    }
 
 }

@@ -19,6 +19,7 @@ namespace FNFoundation;
  * Subclasses will be seen as mutable
  */
 interface FNMutable {
+    
 }
 
 /**
@@ -114,7 +115,7 @@ interface Object {
 
     /**
      * Returns the current class name.
-     * @return string
+     * @return FNClass
      */
     public static function cls();
 
@@ -348,15 +349,15 @@ trait FNDefaultObject {
     public static function super() {
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUndefinedClassInspection */
-        return parent:: cls();
+        return static::cls()->superClass();
     }
 
     /**
      * Returns the current class name.
-     * @return string
+     * @return FNClass
      */
     public static function cls() {
-        return get_called_class();
+        return FNClass::initWith(get_called_class());
     }
 
     /**
@@ -365,7 +366,7 @@ trait FNDefaultObject {
      * @return boolean
      */
     public function respondsToMethod($method) {
-        return method_exists(isset($this) ? $this : static::cls(), cstring($method));
+        return method_exists(isset($this) ? $this : cstring(static::cls()), cstring($method));
     }
 
     /**
@@ -374,7 +375,7 @@ trait FNDefaultObject {
      * @return boolean
      */
     public static function respondsToStaticMethod($method) {
-        return method_exists(static::cls(), cstring($method));
+        return method_exists(cstring(static::cls()), cstring($method));
     }
 
     /**
@@ -387,7 +388,7 @@ trait FNDefaultObject {
      */
     public function callMethod($method, /** @noinspection PhpUnusedParameterInspection */
                                $list = NULL /*infinite arguments*/) {
-        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)
+        return call_user_func_array(array(isset($this) ? $this : cstring(static::cls()), cstring($method)
         ), array_slice(func_get_args(), 1, func_num_args() - 2));
     }
 
@@ -400,7 +401,7 @@ trait FNDefaultObject {
      * @return mixed
      */
     public function callMethodWithArray($method, array $array) {
-        return call_user_func_array(array(isset($this) ? $this : static::cls(), cstring($method)), carray($array));
+        return call_user_func_array(array(isset($this) ? $this : cstring(static::cls()), cstring($method)), carray($array));
     }
 
     /**
@@ -413,7 +414,7 @@ trait FNDefaultObject {
      */
     public static function callStaticMethod($method, /** @noinspection PhpUnusedParameterInspection */
                                             $list = NULL /*infinite arguments*/) {
-        return call_user_func_array(array(static::cls(), cstring($method)
+        return call_user_func_array(array(cstring(static::cls()), cstring($method)
         ), array_slice(func_get_args(), 1, func_num_args() - 2));
     }
 
@@ -426,7 +427,7 @@ trait FNDefaultObject {
      * @return mixed
      */
     public static function callStaticMethodWithArray($method, array $array) {
-        return call_user_func_array(array(static::cls(), cstring($method)), carray($array));
+        return call_user_func_array(array(cstring(static::cls()), cstring($method)), carray($array));
     }
 
     /**
@@ -446,7 +447,7 @@ trait FNDefaultObject {
      * @return boolean
      */
     public function isMemberOf($class) {
-        return $this::cls() == cstring($class);
+        return $this::cls()->isEqualTo(cstring($class));
     }
 
     /**
@@ -470,7 +471,7 @@ trait FNDefaultObject {
      * @return string
      */
     public function __toString() {
-        return '<' . $this::cls() . '>';
+        return '<' . cstring($this::cls()) . '>';
     }
 
     /**
@@ -511,7 +512,7 @@ trait FNDefaultComparable {
         if (!is_object($value))
             return FALSE;
         if ($value instanceof Object && $this instanceof Object) {
-            return $value::cls() == $this::cls();
+            return $value::cls()->isEqualTo($this::cls());
         } else return get_class($value) == get_class($this);
     }
 }
