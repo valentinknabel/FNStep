@@ -13,6 +13,11 @@ namespace FNFoundation;
  * Class FNMutable
  * @package FNFoundation
  */
+/**
+ * Class FNMutable
+ * @package FNFoundation
+ * Subclasses will be seen as mutable
+ */
 interface FNMutable {
 }
 
@@ -519,4 +524,3 @@ class FNObject implements Object, FNComparable {
     use FNDefaultObject;
     use FNDefaultComparable;
 }
-

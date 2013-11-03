@@ -11,6 +11,10 @@ namespace FNFoundation;
 
 use Closure;
 
+/**
+ * Class FNPattern
+ * @package FNFoundation
+ */
 class FNPattern extends FNObject {
     ## Regex Options
     const OPTION_AMBIGUITY_MATCH_ON = 'i';
@@ -31,10 +35,23 @@ class FNPattern extends FNObject {
     const MODE_POSIX_BASIC = 'b';
     const MODE_POSIX_EXTENDED = 'd';
 
+    /**
+     * @var string
+     */
     private $_string;
+    /**
+     * @var null
+     */
     private $_options;
+    /**
+     * @var string
+     */
     private $_encoding;
 
+    /**
+     * @param $string
+     * @param null $options
+     */
     protected function __construct($string, $options = NULL) {
         parent::__construct();
 
@@ -47,14 +64,29 @@ class FNPattern extends FNObject {
         }
     }
 
+    /**
+     * @param $string
+     * @param null $options
+     * @return static
+     */
     static function initWith($string, $options = NULL) {
         return new static($string, $options);
     }
 
+    /**
+     * @param FNString $string
+     * @param null $options
+     * @return static
+     */
     static function initWithString(FNString $string, $options = NULL) {
         return new static($string, $options);
     }
 
+    /**
+     * @param FNString $string
+     * @param FNArray $matches
+     * @return bool
+     */
     function stringMatches(FNString $string, FNArray &$matches = NULL) {
         mb_regex_encoding($this->_encoding);
 
@@ -64,24 +96,42 @@ class FNPattern extends FNObject {
         return $matched;
     }
 
+    /**
+     * @param FNString $string
+     * @param FNString $replacement
+     * @return FNString
+     */
     function stringReplace(FNString $string, FNString $replacement) {
         mb_regex_encoding($this->_encoding);
 
         return s(mb_ereg_replace($this->_string, cstring($string), cstring($replacement)));
     }
 
-    function stringReplaceWithCallback(FNString $string, Closure $callback) {
+    /**
+     * @param FNString $string
+     * @param FNCall $callback
+     */
+    function stringReplaceWithCallback(FNString $string, FNCall $callback) {
 
     }
 
+    /**
+     * @param $encoding
+     */
     function setEncoding($encoding) {
         $this->_encoding = $encoding;
     }
 
+    /**
+     * @return string
+     */
     function encoding() {
         return $this->_encoding;
     }
 
+    /**
+     * @return FNString
+     */
     function patternString() {
         return s($this->_string);
     }
